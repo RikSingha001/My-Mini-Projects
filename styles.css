@@ -73,3 +73,19 @@
       text-shadow: 0 0 10px lime, 0 0 20px lime;
       letter-spacing: 4px;
     }
+    .device-warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #222;
+  color: yellow;
+  font-size: 18px;
+  text-align: center;
+  padding: 10px 0;
+  border-bottom: 2px solid red;
+  z-index: 1000;
+  font-weight: bold;
+  box-shadow: 0 0 10px red;
+}
+
