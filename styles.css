@@ -88,4 +88,30 @@
   font-weight: bold;
   box-shadow: 0 0 10px red;
 }
+.mobile-controls {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 1000;
+}
+
+.mobile-controls button {
+  background-color: #222;
+  color: lime;
+  border: 2px solid lime;
+  font-size: 24px;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .mobile-controls {
+    display: block;
+  }
+}
 
