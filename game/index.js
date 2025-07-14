@@ -4,7 +4,7 @@ const resultDisplay = document.getElementById('result');
 const end = document.getElementById('end');
 const tilesize=20;
 const tileCount = canvas.width / tilesize;
-let snake = [{ x: 5, y: 5 }];
+let snake = [{ x: 510, y: 510 }];
 let direction = { x: 1, y: 0 };
 let food = randomFood();
 let result =0;
@@ -108,7 +108,7 @@ document.addEventListener("keydown",(e)=>{
 
 });
 function restartGame(){
-  snake= [{x:5,y:5}];
+  snake= [{x:510,y:510}];
   direction={x:1,y:0};
   food=randomFood();
   gameOver=false;
