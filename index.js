@@ -99,6 +99,17 @@ document.addEventListener("keydown", (e) => {
     direction = { x: 1, y: 0 };
   }
 });
+function setDirection(dir) {
+  if (dir === 'up' && direction.y === 0) {
+    direction = { x: 0, y: -1 };
+  } else if (dir === 'down' && direction.y === 0) {
+    direction = { x: 0, y: 1 };
+  } else if (dir === 'left' && direction.x === 0) {
+    direction = { x: -1, y: 0 };
+  } else if (dir === 'right' && direction.x === 0) {
+    direction = { x: 1, y: 0 };
+  }
+}
 
 function restartGame() {
   snake = [{ x: 5, y: 5 }];
