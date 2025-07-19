@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="html-ka.css" />
+  <title>Calculator</title>
+</head>
+<body>
+  <main>
+    <div id="box">
+      <div class="screen">
+        <label for="textarea" style="display:none;">Calculator Input</label>
+        <input
+          type="text"
+          id="textarea"
+          title="Enter calculation"
+          placeholder="Type your expression..."
+          readonly
+        />
+
+        <div class="btn">
+          <button type="button" id="allClr">AC</button>
+          <button type="button" id="clear">C</button>
+          <button type="button" id="delete">DEL</button>
+          <button type="button" id="divide" value="/">/</button>
+          <button type="button" id="multiply" value="*">*</button>
+          <button type="button" id="seven" value="7">7</button>
+          <button type="button" id="eight" value="8">8</button>
+          <button type="button" id="nine" value="9">9</button>
+          <button type="button" id="minus" value="-">-</button>
+          <button type="button" id="four" value="4">4</button>
+          <button type="button" id="five" value="5">5</button>
+          <button type="button" id="six" value="6">6</button>
+          <button type="button" id="plus" value="+">+</button>
+          <button type="button" id="one" value="1">1</button>
+          <button type="button" id="two" value="2">2</button>
+          <button type="button" id="three" value="3">3</button>
+          <button type="button" id="equal">=</button>
+          <button type="button" id="zero" value="0">0</button>
+          <button type="button" id="point" value=".">.</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <div id="supportWidget" style="position:fixed;bottom:18px;right:18px;background:#bd5fff;color:#fff;padding:15px 20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.3);font-family:sans-serif;cursor:pointer;z-index:9999;">💜 Contact Me</div><div id="contactBox" style="display:none;position:fixed;bottom:80px;right:18px;background:#fff;color:#333;padding:20px;width:250px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.2);z-index:9999;"><div id="closeBtn" style="position:absolute;top:5px;right:10px;cursor:pointer;font-weight:bold;font-size:18px;">&times;</div><h3 style="margin-top:0;font-family:sans-serif;">Contact Me</h3><form action="https://formspree.io/f/mrblbawn" method="POST"><input type="text" name="name" placeholder="Your name" required style="width:100%;padding:8px;margin-top:8px;border-radius:5px;border:1px solid #ccc;font-family:sans-serif;"><input type="email" name="email" placeholder="Your email" required style="width:100%;padding:8px;margin-top:8px;border-radius:5px;border:1px solid #ccc;font-family:sans-serif;"><textarea name="message" placeholder="Your message" rows="3" required style="width:100%;padding:8px;margin-top:8px;border-radius:5px;border:1px solid #ccc;font-family:sans-serif;"></textarea><button type="submit" style="margin-top:10px;background:#bd5fff;color:#fff;padding:8px;border:none;border-radius:5px;cursor:pointer;width:100%;">Send</button></form></div><script>document.getElementById("supportWidget").onclick=function(){const b=document.getElementById("contactBox");b.style.display=b.style.display==="block"?"none":"block"};document.getElementById("closeBtn").onclick=function(){document.getElementById("contactBox").style.display="none";};</script>
+
+
+
+  <script src="script.js"></script>
+</body>
+</html>
