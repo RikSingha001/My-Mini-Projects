@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .generator-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .form-section h2 {
+            color: #444;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e1e1;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .color-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .color-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-group input[type="color"] {
+            width: 50px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #28a745;
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: #218838;
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .qr-section {
+            text-align: center;
+        }
+
+        .qr-section h2 {
+            color: #444;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+
+        .qr-display {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border: 2px solid #f0f0f0;
+        }
+
+        #qrcode {
+            margin: 0 auto;
+            display: block;
+        }
+
+        .qr-placeholder {
+            width: 300px;
+            height: 300px;
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 18px;
+            margin: 0 auto;
+        }
+
+        .qr-info {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            text-align: left;
+        }
+
+        .qr-text {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            word-break: break-all;
+            font-size: 12px;
+        }
+
+        .download-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .generator-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .download-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .color-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-list {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-list h4 {
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .feature-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 5px 0;
+            color: #666;
+        }
+
+        .feature-list li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 QR Code Generator</h1>
+            <p>Create beautiful, customizable QR codes instantly</p>
+        </div>
+
+        <div class="generator-section">
+            <div class="form-section">
+                <h2>Customize Your QR Code</h2>
+                
+                <div class="form-group">
+                    <label for="qrText">Content (URL, Text, etc.)</label>
+                    <textarea id="qrText" rows="3" placeholder="Enter URL, text, or any content for your QR code">https://example.com</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="qrSize">QR Code Size</label>
+                    <select id="qrSize">
+                        <option value="200">Small (200x200)</option>
+                        <option value="300" selected>Medium (300x300)</option>
+                        <option value="400">Large (400x400)</option>
+                        <option value="500">Extra Large (500x500)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Colors</label>
+                    <div class="color-inputs">
+                        <div class="color-group">
+                            <input type="color" id="foregroundColor" value="#000000">
+                            <label for="foregroundColor">Foreground</label>
+                        </div>
+                        <div class="color-group">
+                            <input type="color" id="backgroundColor" value="#ffffff">
+                            <label for="backgroundColor">Background</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="errorLevel">Error Correction Level</label>
+                    <select id="errorLevel">
+                        <option value="L">Low (7%)</option>
+                        <option value="M" selected>Medium (15%)</option>
+                        <option value="Q">Quartile (25%)</option>
+                        <option value="H">High (30%)</option>
+                    </select>
+                </div>
+
+                <button class="btn" onclick="generateQR()">Generate QR Code</button>
+
+                <div class="feature-list">
+                    <h4>Features:</h4>
+                    <ul>
+                        <li>Custom colors and sizes</li>
+                        <li>Multiple error correction levels</li>
+                        <li>Download as PNG or SVG</li>
+                        <li>Works with URLs, text, WiFi, etc.</li>
+                        <li>High-quality output</li>
+                        <li>No data stored or uploaded</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="qr-section">
+                <h2>Your QR Code</h2>
+                <div class="qr-display">
+                    <div class="qr-placeholder" id="qrPlaceholder">
+                        📱 Your QR code will appear here
+                    </div>
+                    <canvas id="qrcode" style="display: none;"></canvas>
+                    
+                    <div class="qr-info" id="qrInfo" style="display: none;">
+                        <strong>Content:</strong>
+                        <div class="qr-text" id="qrContent"></div>
+                        
+                        <div class="download-options">
+                            <button class="btn btn-secondary" onclick="downloadQR('png')">Download PNG</button>
+                            <button class="btn btn-secondary" onclick="downloadQR('svg')">Download SVG</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="supportWidget" style="position:fixed;bottom:18px;right:18px;background:#bd5fff;color:#fff;padding:15px 20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.3);font-family:sans-serif;cursor:pointer;z-index:9999;">💜 Contact Me</div><div id="contactBox" style="display:none;position:fixed;bottom:80px;right:18px;background:#fff;color:#333;padding:20px;width:250px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.2);z-index:9999;"><div id="closeBtn" style="position:absolute;top:5px;right:10px;cursor:pointer;font-weight:bold;font-size:18px;">&times;</div><h3 style="margin-top:0;font-family:sans-serif;">Contact Me</h3><form action="https://formspree.io/f/mrblbawn" method="POST"><input type="text" name="name" placeholder="Your name" required style="width:100%;padding:8px;margin-top:8px;border-radius:5px;border:1px solid #ccc;font-family:sans-serif;"><input type="email" name="email" placeholder="Your email" required style="width:100%;padding:8px;margin-top:8px;border-radius:5px;border:1px solid #ccc;font-family:sans-serif;"><textarea name="message" placeholder="Your message" rows="3" required style="width:100%;padding:8px;margin-top:8px;border-radius:5px;border:1px solid #ccc;font-family:sans-serif;"></textarea><button type="submit" style="margin-top:10px;background:#bd5fff;color:#fff;padding:8px;border:none;border-radius:5px;cursor:pointer;width:100%;">Send</button></form></div><script>document.getElementById("supportWidget").onclick=function(){const b=document.getElementById("contactBox");b.style.display=b.style.display==="block"?"none":"block"};document.getElementById("closeBtn").onclick=function(){document.getElementById("contactBox").style.display="none";};</script>
+    <script src ="qrcode.js"></script>
+</body>
+</html>
