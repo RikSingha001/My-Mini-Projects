@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Birthday Magic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow: hidden;
+        }
+
+        .main-container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .name-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: floatUp 1s ease-out;
+        }
+
+        .birthday-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            animation: magicalEntrance 2s ease-out;
+            position: relative;
+            max-width: 700px;
+            display: none;
+        }
+
+        .input-title {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 2s ease-in-out infinite;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .name-input {
+            padding: 15px 20px;
+            font-size: 1.3rem;
+            border: 3px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                       linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1) border-box;
+            border-radius: 50px;
+            outline: none;
+            width: 300px;
+            text-align: center;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+
+        .name-input:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+        }
+
+        .create-button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+            margin-top: 15px;
+        }
+
+        .create-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .personalized-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowWave 4s ease-in-out infinite, textBounce 3s ease-in-out infinite;
+            margin-bottom: 25px;
+            text-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .birthday-crown {
+            font-size: 4rem;
+            animation: crownSpin 4s linear infinite;
+            margin: 20px 0;
+        }
+
+        .birthday-wishes {
+            font-size: 1.4rem;
+            color: #444;
+            margin: 25px 0;
+            line-height: 1.6;
+            animation: fadeInText 2s ease-out;
+        }
+
+        .magical-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatAround 6s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        .party-blast-button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #feca57);
+            background-size: 300% 300%;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.4rem;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 25px 10px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .party-blast-button:hover {
+            transform: translateY(-8px) rotate(5deg) scale(1.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: buttonGlow 0.5s ease-in-out;
+        }
+
+        .reset-button {
+            background: linear-gradient(45deg, #96ceb4, #feca57);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-button:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes rainbowWave {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 200% 50%; }
+            75% { background-position: 300% 50%; }
+        }
+
+        @keyframes textBounce {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            25% { transform: translateY(-10px) scale(1.02); }
+            50% { transform: translateY(0px) scale(1); }
+            75% { transform: translateY(-5px) scale(1.01); }
+        }
+
+        @keyframes crownSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(90deg) scale(1.1); }
+            50% { transform: rotate(180deg) scale(1); }
+            75% { transform: rotate(270deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes floatUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes magicalEntrance {
+            from {
+                opacity: 0;
+                transform: scale(0.3) rotate(180deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes floatAround {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+            }
+            25% { 
+                transform: translateY(-20px) translateX(10px) rotate(90deg);
+            }
+            50% { 
+                transform: translateY(-10px) translateX(-10px) rotate(180deg);
+            }
+            75% { 
+                transform: translateY(-25px) translateX(5px) rotate(270deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.7); }
+            50% { box-shadow: 0 0 40px rgba(78, 205, 196, 0.7); }
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes buttonGlow {
+            0% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.7); }
+            50% { box-shadow: 0 0 60px rgba(78, 205, 196, 0.9); }
+            100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.7); }
+        }
+
+        .firework {
+            position: fixed;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="magical-elements">
+        <div class="floating-emoji" style="top: 10%; left: 15%; animation-delay: 0s;">🎈</div>
+        <div class="floating-emoji" style="top: 20%; left: 80%; animation-delay: 1s;">🎉</div>
+        <div class="floating-emoji" style="top: 60%; left: 10%; animation-delay: 2s;">🎊</div>
+        <div class="floating-emoji" style="top: 70%; left: 85%; animation-delay: 3s;">✨</div>
+        <div class="floating-emoji" style="top: 30%; left: 50%; animation-delay: 4s;">🎂</div>
+        <div class="floating-emoji" style="top: 80%; left: 60%; animation-delay: 5s;">🌟</div>
+    </div>
+
+    <div class="main-container">
+        <div class="name-input-container" id="inputContainer">
+            <h2 class="input-title">✨ Create Magical Birthday Wishes ✨</h2>
+            <p style="font-size: 1.2rem; color: #666; margin-bottom: 20px;">
+                Enter your friend's name to create a personalized birthday celebration!
+            </p>
+            <input 
+                type="text" 
+                class="name-input" 
+                id="friendName" 
+                placeholder="Enter friend's name..." 
+                maxlength="20"
+            >
+            <br>
+            <button class="create-button" onclick="createBirthdayCard()">
+                🎭 Create Magic 🎭
+            </button>
+        </div>
+
+        <div class="birthday-container" id="birthdayCard">
+            <h1 class="personalized-title" id="personalizedTitle"></h1>
+            
+            <div class="birthday-crown">👑</div>
+            
+            <div class="birthday-wishes" id="personalizedMessage">
+                Today is YOUR special day!<br>
+                May this new year bring you endless joy,<br>
+                amazing adventures, and all your dreams come true! 🌈
+            </div>
+            
+            <button class="party-blast-button" onclick="partyBlast()">
+                🎆 PARTY BLAST! 🎆
+            </button>
+            
+            <button class="party-blast-button" onclick="surpriseMe()">
+                🎁 SURPRISE ME! 🎁
+            </button>
+            
+            <br>
+            <button class="reset-button" onclick="resetCard()">
+                ↺ Create for Another Friend
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentName = '';
+
+        function createBirthdayCard() {
+            const nameInput = document.getElementById('friendName');
+            const name = nameInput.value.trim();
+            
+            if (name === '') {
+                alert('Please enter your friend\'s name! 😊');
+                nameInput.focus();
+                return;
+            }
+            
+            currentName = name;
+            const inputContainer = document.getElementById('inputContainer');
+            const birthdayCard = document.getElementById('birthdayCard');
+            const personalizedTitle = document.getElementById('personalizedTitle');
+            const personalizedMessage = document.getElementById('personalizedMessage');
+            
+            // Update title and message
+            personalizedTitle.textContent = `HAPPY BIRTHDAY ${name.toUpperCase()}! 🎂`;
+            personalizedMessage.innerHTML = `
+                Dear ${name},<br>
+                Today is YOUR special day!<br>
+                May this new year bring you endless joy,<br>
+                amazing adventures, and all your dreams come true! 🌈<br>
+                <strong>You're absolutely amazing! 💖</strong>
+            `;
+            
+            // Hide input, show card
+            inputContainer.style.display = 'none';
+            birthdayCard.style.display = 'block';
+            
+            // Create celebration effects
+            setTimeout(() => {
+                createFireworks();
+            }, 500);
+        }
+
+        function partyBlast() {
+            // Create multiple effects
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    createFireworks();
+                    createFloatingMessage();
+                }, i * 100);
+            }
+            
+            // Animate button
+            const button = event.target;
+            button.innerHTML = '🌟 AMAZING! 🌟';
+            button.style.animation = 'buttonGlow 0.5s ease-in-out 3';
+            
+            setTimeout(() => {
+                button.innerHTML = '🎆 PARTY BLAST! 🎆';
+                button.style.animation = '';
+            }, 2000);
+        }
+
+        function surpriseMe() {
+            const surprises = [
+                `🎵 Happy Birthday song playing for ${currentName}! 🎵`,
+                `🎨 ${currentName} deserves all the colors in the world! 🎨`,
+                `🚀 ${currentName} is launching into an amazing new year! 🚀`,
+                `⭐ ${currentName} shines brighter than all the stars! ⭐`,
+                `🦄 ${currentName} is as magical as a unicorn! 🦄`
+            ];
+            
+            const randomSurprise = surprises[Math.floor(Math.random() * surprises.length)];
+            
+            // Create floating surprise message
+            const surpriseDiv = document.createElement('div');
+            surpriseDiv.innerHTML = randomSurprise;
+            surpriseDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 20px;
+                font-size: 1.5rem;
+                font-weight: bold;
+                z-index: 1000;
+                animation: magicalEntrance 1s ease-out;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            `;
+            
+            document.body.appendChild(surpriseDiv);
+            
+            // Create rainbow background effect
+            document.body.style.animation = 'gradientShift 0.5s ease infinite';
+            
+            setTimeout(() => {
+                surpriseDiv.remove();
+                document.body.style.animation = 'gradientShift 8s ease infinite';
+            }, 3000);
+            
+            // More fireworks
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => createFireworks(), i * 200);
+            }
+        }
+
+        function resetCard() {
+            const inputContainer = document.getElementById('inputContainer');
+            const birthdayCard = document.getElementById('birthdayCard');
+            const nameInput = document.getElementById('friendName');
+            
+            birthdayCard.style.display = 'none';
+            inputContainer.style.display = 'block';
+            nameInput.value = '';
+            nameInput.focus();
+            currentName = '';
+        }
+
+        function createFireworks() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
+            const firework = document.createElement('div');
+            
+            firework.className = 'firework';
+            firework.style.cssText = `
+                left: ${Math.random() * window.innerWidth}px;
+                top: ${Math.random() * window.innerHeight}px;
+                width: 20px;
+                height: 20px;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+            `;
+            
+            document.body.appendChild(firework);
+            
+            setTimeout(() => firework.remove(), 1000);
+        }
+
+        function createFloatingMessage() {
+            const messages = ['🎉', '✨', '🎊', '💖', '🌟', '🎈', '🎂', '👑'];
+            const message = document.createElement('div');
+            
+            message.innerHTML = messages[Math.floor(Math.random() * messages.length)];
+            message.style.cssText = `
+                position: fixed;
+                font-size: 2rem;
+                left: ${Math.random() * window.innerWidth}px;
+                top: ${window.innerHeight}px;
+                animation: floatUp 2s ease-out forwards;
+                pointer-events: none;
+                z-index: 1000;
+            `;
+            
+            document.body.appendChild(message);
+            setTimeout(() => message.remove(), 2000);
+        }
+
+        // Allow Enter key to create card
+        document.getElementById('friendName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                createBirthdayCard();
+            }
+        });
+
+        // Focus on input when page loads
+        window.onload = function() {
+            document.getElementById('friendName').focus();
+        };
+    </script>
+</body>
+</html>
