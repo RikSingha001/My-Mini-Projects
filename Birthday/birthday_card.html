@@ -6,288 +6,437 @@
     <title>Personalized Birthday Magic</title>
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
-            background-size: 300% 300%;
-            animation: gradientShift 8s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            overflow: hidden;
-        }
+body {
+    min-height: 100vh;
+    background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+    background-size: 300% 300%;
+    animation: gradientShift 8s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    overflow-x: hidden;
+    padding: 10px;
+}
 
-        .main-container {
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
+.main-container {
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 100%;
+}
 
-        .name-input-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            animation: floatUp 1s ease-out;
-        }
+.name-input-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    animation: floatUp 1s ease-out;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+}
 
-        .birthday-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 50px;
-            border-radius: 30px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            border: 3px solid rgba(255, 255, 255, 0.4);
-            animation: magicalEntrance 2s ease-out;
-            position: relative;
-            max-width: 700px;
-            display: none;
-        }
+.birthday-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px 20px;
+    border-radius: 25px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    animation: magicalEntrance 2s ease-out;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    display: none;
+    margin: 0 auto;
+}
 
-        .input-title {
-            font-size: 2.5rem;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 2s ease-in-out infinite;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
+.input-title {
+    font-size: 2rem;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 2s ease-in-out infinite;
+    margin-bottom: 15px;
+    font-weight: bold;
+    line-height: 1.2;
+}
 
-        .name-input {
-            padding: 15px 20px;
-            font-size: 1.3rem;
-            border: 3px solid transparent;
-            background: linear-gradient(white, white) padding-box,
-                       linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1) border-box;
-            border-radius: 50px;
-            outline: none;
-            width: 300px;
-            text-align: center;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            margin: 20px 0;
-        }
+.name-input {
+    padding: 12px 18px;
+    font-size: 1.1rem;
+    border: 3px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+               linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1) border-box;
+    border-radius: 50px;
+    outline: none;
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    margin: 15px 0;
+}
 
-        .name-input:focus {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
-        }
+.name-input:focus {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(255, 107, 107, 0.5);
+}
 
-        .create-button {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
-            background-size: 200% 200%;
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            font-size: 1.3rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            animation: pulse 2s ease-in-out infinite;
-            margin-top: 15px;
-        }
+.create-button {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+    background-size: 200% 200%;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    animation: pulse 2s ease-in-out infinite;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 200px;
+}
 
-        .create-button:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-        }
+.create-button:hover, .create-button:active {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
 
-        .personalized-title {
-            font-size: 3.5rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: rainbowWave 4s ease-in-out infinite, textBounce 3s ease-in-out infinite;
-            margin-bottom: 25px;
-            text-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
+.personalized-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: rainbowWave 4s ease-in-out infinite, textBounce 3s ease-in-out infinite;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    line-height: 1.2;
+    word-break: break-word;
+}
 
-        .birthday-crown {
-            font-size: 4rem;
-            animation: crownSpin 4s linear infinite;
-            margin: 20px 0;
-        }
+.birthday-crown {
+    font-size: 3rem;
+    animation: crownSpin 4s linear infinite;
+    margin: 15px 0;
+}
 
-        .birthday-wishes {
-            font-size: 1.4rem;
-            color: #444;
-            margin: 25px 0;
-            line-height: 1.6;
-            animation: fadeInText 2s ease-out;
-        }
+.birthday-wishes {
+    font-size: 1.2rem;
+    color: #444;
+    margin: 20px 0;
+    line-height: 1.6;
+    animation: fadeInText 2s ease-out;
+    padding: 0 10px;
+}
 
-        .magical-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
+.magical-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
 
-        .floating-emoji {
-            position: absolute;
-            font-size: 2rem;
-            animation: floatAround 6s ease-in-out infinite;
-            opacity: 0.8;
-        }
+.floating-emoji {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: floatAround 6s ease-in-out infinite;
+    opacity: 0.8;
+}
 
-        .party-blast-button {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #feca57);
-            background-size: 300% 300%;
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            font-size: 1.4rem;
-            border-radius: 60px;
-            cursor: pointer;
-            font-weight: bold;
-            margin: 25px 10px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
+.party-blast-button {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #feca57);
+    background-size: 300% 300%;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 15px 5px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 280px;
+    display: block;
+}
 
-        .party-blast-button:hover {
-            transform: translateY(-8px) rotate(5deg) scale(1.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            animation: buttonGlow 0.5s ease-in-out;
-        }
+.party-blast-button:hover, .party-blast-button:active {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    animation: buttonGlow 0.5s ease-in-out;
+}
 
-        .reset-button {
-            background: linear-gradient(45deg, #96ceb4, #feca57);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1rem;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
+.reset-button {
+    background: linear-gradient(45deg, #96ceb4, #feca57);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 150px;
+}
 
-        .reset-button:hover {
-            transform: scale(1.05);
-        }
+.reset-button:hover, .reset-button:active {
+    transform: scale(1.02);
+}
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+/* Mobile-specific animations with reduced intensity */
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
 
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+@keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
 
-        @keyframes rainbowWave {
-            0%, 100% { background-position: 0% 50%; }
-            25% { background-position: 100% 50%; }
-            50% { background-position: 200% 50%; }
-            75% { background-position: 300% 50%; }
-        }
+@keyframes rainbowWave {
+    0%, 100% { background-position: 0% 50%; }
+    25% { background-position: 100% 50%; }
+    50% { background-position: 200% 50%; }
+    75% { background-position: 300% 50%; }
+}
 
-        @keyframes textBounce {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            25% { transform: translateY(-10px) scale(1.02); }
-            50% { transform: translateY(0px) scale(1); }
-            75% { transform: translateY(-5px) scale(1.01); }
-        }
+@keyframes textBounce {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    25% { transform: translateY(-5px) scale(1.01); }
+    50% { transform: translateY(0px) scale(1); }
+    75% { transform: translateY(-3px) scale(1.005); }
+}
 
-        @keyframes crownSpin {
-            0% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(90deg) scale(1.1); }
-            50% { transform: rotate(180deg) scale(1); }
-            75% { transform: rotate(270deg) scale(1.1); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
+@keyframes crownSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(1.05); }
+    50% { transform: rotate(180deg) scale(1); }
+    75% { transform: rotate(270deg) scale(1.05); }
+    100% { transform: rotate(360deg) scale(1); }
+}
 
-        @keyframes floatUp {
-            from {
-                opacity: 0;
-                transform: translateY(100px) scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
+@keyframes floatUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
 
-        @keyframes magicalEntrance {
-            from {
-                opacity: 0;
-                transform: scale(0.3) rotate(180deg);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) rotate(0deg);
-            }
-        }
+@keyframes magicalEntrance {
+    from {
+        opacity: 0;
+        transform: scale(0.5) rotate(90deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
 
-        @keyframes floatAround {
-            0%, 100% { 
-                transform: translateY(0px) translateX(0px) rotate(0deg);
-            }
-            25% { 
-                transform: translateY(-20px) translateX(10px) rotate(90deg);
-            }
-            50% { 
-                transform: translateY(-10px) translateX(-10px) rotate(180deg);
-            }
-            75% { 
-                transform: translateY(-25px) translateX(5px) rotate(270deg);
-            }
-        }
+@keyframes floatAround {
+    0%, 100% { 
+        transform: translateY(0px) translateX(0px) rotate(0deg);
+    }
+    25% { 
+        transform: translateY(-15px) translateX(8px) rotate(45deg);
+    }
+    50% { 
+        transform: translateY(-8px) translateX(-8px) rotate(90deg);
+    }
+    75% { 
+        transform: translateY(-18px) translateX(4px) rotate(135deg);
+    }
+}
 
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.7); }
-            50% { box-shadow: 0 0 40px rgba(78, 205, 196, 0.7); }
-        }
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 107, 0.6); }
+    50% { box-shadow: 0 0 25px rgba(78, 205, 196, 0.6); }
+}
 
-        @keyframes fadeInText {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+@keyframes fadeInText {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
 
-        @keyframes buttonGlow {
-            0% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.7); }
-            50% { box-shadow: 0 0 60px rgba(78, 205, 196, 0.9); }
-            100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.7); }
-        }
+@keyframes buttonGlow {
+    0% { box-shadow: 0 0 15px rgba(255, 107, 107, 0.6); }
+    50% { box-shadow: 0 0 35px rgba(78, 205, 196, 0.8); }
+    100% { box-shadow: 0 0 15px rgba(255, 107, 107, 0.6); }
+}
 
-        .firework {
-            position: fixed;
-            border-radius: 50%;
-            animation: explode 1s ease-out forwards;
-            pointer-events: none;
-        }
+.firework {
+    position: fixed;
+    border-radius: 50%;
+    animation: explode 1s ease-out forwards;
+    pointer-events: none;
+}
 
-        @keyframes explode {
-            0% {
-                transform: scale(0);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
+@keyframes explode {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* Tablet landscape adjustments */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .personalized-title {
+        font-size: 3rem;
+    }
+    
+    .birthday-container {
+        padding: 35px 30px;
+        max-width: 600px;
+    }
+    
+    .name-input-container {
+        max-width: 400px;
+        padding: 30px;
+    }
+    
+    .party-blast-button {
+        max-width: 320px;
+        font-size: 1.3rem;
+    }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+    .personalized-title {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+    
+    .input-title {
+        font-size: 1.8rem;
+    }
+    
+    .birthday-crown {
+        font-size: 2.5rem;
+        margin: 10px 0;
+    }
+    
+    .birthday-wishes {
+        font-size: 1.1rem;
+        margin: 15px 0;
+        padding: 0 5px;
+    }
+    
+    .name-input {
+        font-size: 1rem;
+        padding: 10px 15px;
+    }
+    
+    .create-button {
+        font-size: 1rem;
+        padding: 10px 25px;
+    }
+    
+    .party-blast-button {
+        font-size: 1.1rem;
+        padding: 12px 25px;
+        margin: 10px 5px;
+    }
+    
+    .floating-emoji {
+        font-size: 1.2rem;
+    }
+    
+    .name-input-container {
+        padding: 15px;
+        border-radius: 15px;
+    }
+    
+    .birthday-container {
+        padding: 20px 15px;
+        border-radius: 20px;
+    }
+}
+
+/* Very small mobile devices */
+@media screen and (max-width: 320px) {
+    .personalized-title {
+        font-size: 1.8rem;
+    }
+    
+    .input-title {
+        font-size: 1.6rem;
+    }
+    
+    .birthday-wishes {
+        font-size: 1rem;
+    }
+    
+    .party-blast-button {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .create-button:active,
+    .party-blast-button:active,
+    .reset-button:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    /* Reduce animation intensity for better performance on mobile */
+    .personalized-title {
+        animation: rainbowWave 6s ease-in-out infinite;
+    }
+    
+    .birthday-crown {
+        animation: crownSpin 6s linear infinite;
+    }
+    
+    .floating-emoji {
+        animation: floatAround 8s ease-in-out infinite;
+    }
+}
+
+/* High DPI display adjustments */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .personalized-title,
+    .input-title {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
     </style>
 </head>
 <body>
