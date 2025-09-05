@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personalized Birthday Magic</title>
     <style>
-        * {
+       * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -21,7 +21,7 @@ body {
     align-items: center;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     overflow-x: hidden;
-    padding: 10px;
+    padding: 20px;
 }
 
 .main-container {
@@ -32,68 +32,69 @@ body {
     max-width: 100%;
 }
 
+/* LAPTOP/DESKTOP STYLES (Default) */
 .name-input-container {
     background: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
     border: 2px solid rgba(255, 255, 255, 0.3);
     animation: floatUp 1s ease-out;
     width: 100%;
-    max-width: 350px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
 .birthday-container {
     background: rgba(255, 255, 255, 0.95);
-    padding: 25px 20px;
-    border-radius: 25px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    padding: 50px;
+    border-radius: 30px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 3px solid rgba(255, 255, 255, 0.4);
     animation: magicalEntrance 2s ease-out;
     position: relative;
     width: 100%;
-    max-width: 100%;
+    max-width: 700px;
     display: none;
     margin: 0 auto;
 }
 
 .input-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: shimmer 2s ease-in-out infinite;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     font-weight: bold;
     line-height: 1.2;
 }
 
 .name-input {
-    padding: 12px 18px;
-    font-size: 1.1rem;
+    padding: 15px 20px;
+    font-size: 1.3rem;
     border: 3px solid transparent;
     background: linear-gradient(white, white) padding-box,
                linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1) border-box;
     border-radius: 50px;
     outline: none;
     width: 100%;
-    max-width: 280px;
+    max-width: 300px;
     text-align: center;
     font-family: inherit;
     transition: all 0.3s ease;
-    margin: 15px 0;
+    margin: 20px 0;
 }
 
 .name-input:focus {
-    transform: scale(1.02);
-    box-shadow: 0 0 25px rgba(255, 107, 107, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
 }
 
 .create-button {
@@ -101,25 +102,24 @@ body {
     background-size: 200% 200%;
     color: white;
     border: none;
-    padding: 12px 28px;
-    font-size: 1.1rem;
+    padding: 15px 35px;
+    font-size: 1.3rem;
     border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s ease;
     animation: pulse 2s ease-in-out infinite;
-    margin-top: 10px;
-    width: 100%;
-    max-width: 200px;
+    margin-top: 15px;
+    min-width: 200px;
 }
 
-.create-button:hover, .create-button:active {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+.create-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 .personalized-title {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     font-weight: bold;
     background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3);
     background-size: 400% 400%;
@@ -127,25 +127,25 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: rainbowWave 4s ease-in-out infinite, textBounce 3s ease-in-out infinite;
-    margin-bottom: 20px;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 25px;
+    text-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     line-height: 1.2;
     word-break: break-word;
 }
 
 .birthday-crown {
-    font-size: 3rem;
+    font-size: 4rem;
     animation: crownSpin 4s linear infinite;
-    margin: 15px 0;
+    margin: 20px 0;
 }
 
 .birthday-wishes {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: #444;
-    margin: 20px 0;
+    margin: 25px 0;
     line-height: 1.6;
     animation: fadeInText 2s ease-out;
-    padding: 0 10px;
+    padding: 0 20px;
 }
 
 .magical-elements {
@@ -160,7 +160,7 @@ body {
 
 .floating-emoji {
     position: absolute;
-    font-size: 1.5rem;
+    font-size: 2rem;
     animation: floatAround 6s ease-in-out infinite;
     opacity: 0.8;
 }
@@ -170,23 +170,22 @@ body {
     background-size: 300% 300%;
     color: white;
     border: none;
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    border-radius: 50px;
+    padding: 18px 40px;
+    font-size: 1.4rem;
+    border-radius: 60px;
     cursor: pointer;
     font-weight: bold;
-    margin: 15px 5px;
+    margin: 25px 10px;
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
-    width: 100%;
-    max-width: 280px;
-    display: block;
+    display: inline-block;
+    min-width: 250px;
 }
 
-.party-blast-button:hover, .party-blast-button:active {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+.party-blast-button:hover {
+    transform: translateY(-8px) rotate(5deg) scale(1.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     animation: buttonGlow 0.5s ease-in-out;
 }
 
@@ -194,21 +193,270 @@ body {
     background: linear-gradient(45deg, #96ceb4, #feca57);
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    border-radius: 25px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border-radius: 30px;
     cursor: pointer;
-    margin-top: 15px;
+    margin-top: 20px;
     transition: all 0.3s ease;
-    width: 100%;
-    max-width: 150px;
+    min-width: 150px;
 }
 
-.reset-button:hover, .reset-button:active {
-    transform: scale(1.02);
+.reset-button:hover {
+    transform: scale(1.05);
 }
 
-/* Mobile-specific animations with reduced intensity */
+/* TABLET LANDSCAPE (1024px and below) */
+@media screen and (max-width: 1024px) {
+    body {
+        padding: 15px;
+    }
+    
+    .personalized-title {
+        font-size: 3rem;
+    }
+    
+    .birthday-container {
+        padding: 35px 30px;
+        max-width: 600px;
+    }
+    
+    .name-input-container {
+        max-width: 400px;
+        padding: 30px;
+    }
+    
+    .party-blast-button {
+        min-width: 220px;
+        font-size: 1.3rem;
+    }
+    
+    .floating-emoji {
+        font-size: 1.8rem;
+    }
+}
+
+/* TABLET PORTRAIT (768px and below) */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .name-input-container {
+        padding: 25px 20px;
+        border-radius: 20px;
+        max-width: 350px;
+    }
+
+    .birthday-container {
+        padding: 30px 20px;
+        border-radius: 25px;
+        max-width: 100%;
+    }
+    
+    .input-title {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+
+    .name-input {
+        padding: 12px 18px;
+        font-size: 1.2rem;
+        max-width: 280px;
+        margin: 15px 0;
+    }
+
+    .create-button {
+        padding: 12px 30px;
+        font-size: 1.2rem;
+        min-width: 180px;
+    }
+
+    .personalized-title {
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+    }
+
+    .birthday-crown {
+        font-size: 3.5rem;
+        margin: 15px 0;
+    }
+
+    .birthday-wishes {
+        font-size: 1.3rem;
+        margin: 20px 0;
+        padding: 0 15px;
+    }
+
+    .party-blast-button {
+        padding: 15px 30px;
+        font-size: 1.3rem;
+        margin: 15px 8px;
+        min-width: 200px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .floating-emoji {
+        font-size: 1.6rem;
+    }
+}
+
+/* MOBILE LANDSCAPE & SMALL TABLETS (640px and below) */
+@media screen and (max-width: 640px) {
+    .personalized-title {
+        font-size: 2.5rem;
+    }
+    
+    .party-blast-button {
+        min-width: 180px;
+        font-size: 1.2rem;
+        padding: 14px 25px;
+    }
+    
+    .birthday-wishes {
+        font-size: 1.2rem;
+    }
+}
+
+/* MOBILE PORTRAIT (480px and below) */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+    
+    .name-input-container {
+        padding: 20px 15px;
+        border-radius: 15px;
+        max-width: 320px;
+    }
+
+    .birthday-container {
+        padding: 25px 15px;
+        border-radius: 20px;
+    }
+    
+    .input-title {
+        font-size: 2rem;
+        margin-bottom: 12px;
+    }
+
+    .name-input {
+        padding: 10px 15px;
+        font-size: 1.1rem;
+        max-width: 250px;
+        margin: 12px 0;
+    }
+
+    .create-button {
+        padding: 10px 25px;
+        font-size: 1.1rem;
+        min-width: 160px;
+    }
+
+    .personalized-title {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+
+    .birthday-crown {
+        font-size: 3rem;
+        margin: 12px 0;
+    }
+
+    .birthday-wishes {
+        font-size: 1.1rem;
+        margin: 15px 0;
+        padding: 0 10px;
+    }
+
+    .party-blast-button {
+        padding: 12px 20px;
+        font-size: 1.1rem;
+        margin: 12px 5px;
+        min-width: 160px;
+        width: calc(100% - 10px);
+        max-width: 280px;
+    }
+    
+    .reset-button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        min-width: 120px;
+    }
+    
+    .floating-emoji {
+        font-size: 1.4rem;
+    }
+}
+
+/* SMALL MOBILE (360px and below) */
+@media screen and (max-width: 360px) {
+    .personalized-title {
+        font-size: 2rem;
+    }
+    
+    .input-title {
+        font-size: 1.8rem;
+    }
+    
+    .birthday-crown {
+        font-size: 2.5rem;
+    }
+    
+    .birthday-wishes {
+        font-size: 1rem;
+    }
+    
+    .party-blast-button {
+        font-size: 1rem;
+        padding: 10px 15px;
+        min-width: 140px;
+    }
+    
+    .name-input {
+        max-width: 220px;
+        font-size: 1rem;
+    }
+    
+    .create-button {
+        font-size: 1rem;
+        min-width: 140px;
+    }
+    
+    .floating-emoji {
+        font-size: 1.2rem;
+    }
+}
+
+/* VERY SMALL MOBILE (320px and below) */
+@media screen and (max-width: 320px) {
+    .name-input-container {
+        padding: 15px 10px;
+        max-width: 300px;
+    }
+    
+    .birthday-container {
+        padding: 20px 10px;
+    }
+    
+    .personalized-title {
+        font-size: 1.8rem;
+    }
+    
+    .input-title {
+        font-size: 1.6rem;
+    }
+    
+    .party-blast-button {
+        width: calc(100% - 20px);
+        max-width: 260px;
+        min-width: 120px;
+    }
+}
+
+/* ANIMATIONS - Optimized for different devices */
 @keyframes gradientShift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -228,23 +476,23 @@ body {
 
 @keyframes textBounce {
     0%, 100% { transform: translateY(0px) scale(1); }
-    25% { transform: translateY(-5px) scale(1.01); }
+    25% { transform: translateY(-10px) scale(1.02); }
     50% { transform: translateY(0px) scale(1); }
-    75% { transform: translateY(-3px) scale(1.005); }
+    75% { transform: translateY(-5px) scale(1.01); }
 }
 
 @keyframes crownSpin {
     0% { transform: rotate(0deg) scale(1); }
-    25% { transform: rotate(90deg) scale(1.05); }
+    25% { transform: rotate(90deg) scale(1.1); }
     50% { transform: rotate(180deg) scale(1); }
-    75% { transform: rotate(270deg) scale(1.05); }
+    75% { transform: rotate(270deg) scale(1.1); }
     100% { transform: rotate(360deg) scale(1); }
 }
 
 @keyframes floatUp {
     from {
         opacity: 0;
-        transform: translateY(50px) scale(0.9);
+        transform: translateY(100px) scale(0.8);
     }
     to {
         opacity: 1;
@@ -255,7 +503,7 @@ body {
 @keyframes magicalEntrance {
     from {
         opacity: 0;
-        transform: scale(0.5) rotate(90deg);
+        transform: scale(0.3) rotate(180deg);
     }
     to {
         opacity: 1;
@@ -268,30 +516,30 @@ body {
         transform: translateY(0px) translateX(0px) rotate(0deg);
     }
     25% { 
-        transform: translateY(-15px) translateX(8px) rotate(45deg);
+        transform: translateY(-20px) translateX(10px) rotate(90deg);
     }
     50% { 
-        transform: translateY(-8px) translateX(-8px) rotate(90deg);
+        transform: translateY(-10px) translateX(-10px) rotate(180deg);
     }
     75% { 
-        transform: translateY(-18px) translateX(4px) rotate(135deg);
+        transform: translateY(-25px) translateX(5px) rotate(270deg);
     }
 }
 
 @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 107, 0.6); }
-    50% { box-shadow: 0 0 25px rgba(78, 205, 196, 0.6); }
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.7); }
+    50% { box-shadow: 0 0 40px rgba(78, 205, 196, 0.7); }
 }
 
 @keyframes fadeInText {
-    from { opacity: 0; transform: translateX(-30px); }
+    from { opacity: 0; transform: translateX(-50px); }
     to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes buttonGlow {
-    0% { box-shadow: 0 0 15px rgba(255, 107, 107, 0.6); }
-    50% { box-shadow: 0 0 35px rgba(78, 205, 196, 0.8); }
-    100% { box-shadow: 0 0 15px rgba(255, 107, 107, 0.6); }
+    0% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.7); }
+    50% { box-shadow: 0 0 60px rgba(78, 205, 196, 0.9); }
+    100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.7); }
 }
 
 .firework {
@@ -307,116 +555,14 @@ body {
         opacity: 1;
     }
     100% {
-        transform: scale(2.5);
+        transform: scale(4);
         opacity: 0;
     }
 }
 
-/* Tablet landscape adjustments */
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-    .personalized-title {
-        font-size: 3rem;
-    }
-    
-    .birthday-container {
-        padding: 35px 30px;
-        max-width: 600px;
-    }
-    
-    .name-input-container {
-        max-width: 400px;
-        padding: 30px;
-    }
-    
-    .party-blast-button {
-        max-width: 320px;
-        font-size: 1.3rem;
-    }
-}
-
-/* Small mobile devices */
-@media screen and (max-width: 480px) {
-    .personalized-title {
-        font-size: 2rem;
-        margin-bottom: 15px;
-    }
-    
-    .input-title {
-        font-size: 1.8rem;
-    }
-    
-    .birthday-crown {
-        font-size: 2.5rem;
-        margin: 10px 0;
-    }
-    
-    .birthday-wishes {
-        font-size: 1.1rem;
-        margin: 15px 0;
-        padding: 0 5px;
-    }
-    
-    .name-input {
-        font-size: 1rem;
-        padding: 10px 15px;
-    }
-    
-    .create-button {
-        font-size: 1rem;
-        padding: 10px 25px;
-    }
-    
-    .party-blast-button {
-        font-size: 1.1rem;
-        padding: 12px 25px;
-        margin: 10px 5px;
-    }
-    
-    .floating-emoji {
-        font-size: 1.2rem;
-    }
-    
-    .name-input-container {
-        padding: 15px;
-        border-radius: 15px;
-    }
-    
-    .birthday-container {
-        padding: 20px 15px;
-        border-radius: 20px;
-    }
-}
-
-/* Very small mobile devices */
-@media screen and (max-width: 320px) {
-    .personalized-title {
-        font-size: 1.8rem;
-    }
-    
-    .input-title {
-        font-size: 1.6rem;
-    }
-    
-    .birthday-wishes {
-        font-size: 1rem;
-    }
-    
-    .party-blast-button {
-        font-size: 1rem;
-        padding: 10px 20px;
-    }
-}
-
-/* Touch device optimizations */
+/* TOUCH DEVICE OPTIMIZATIONS */
 @media (hover: none) and (pointer: coarse) {
-    .create-button:active,
-    .party-blast-button:active,
-    .reset-button:active {
-        transform: scale(0.98);
-        transition: transform 0.1s ease;
-    }
-    
-    /* Reduce animation intensity for better performance on mobile */
+    /* Reduce animation intensity on mobile for better performance */
     .personalized-title {
         animation: rainbowWave 6s ease-in-out infinite;
     }
@@ -428,13 +574,111 @@ body {
     .floating-emoji {
         animation: floatAround 8s ease-in-out infinite;
     }
+    
+    /* Touch feedback */
+    .create-button:active,
+    .party-blast-button:active,
+    .reset-button:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+    }
+    
+    /* Remove hover effects on touch devices */
+    .create-button:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .party-blast-button:hover {
+        transform: none;
+        box-shadow: none;
+        animation: none;
+    }
+    
+    .reset-button:hover {
+        transform: none;
+    }
+    
+    .name-input:focus {
+        transform: scale(1.02);
+    }
+    
+    /* Adjust firework explosion for mobile */
+    @keyframes explode {
+        0% {
+            transform: scale(0);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+    }
 }
 
-/* High DPI display adjustments */
+/* LAPTOP/DESKTOP ENHANCEMENTS (1025px and above) */
+@media screen and (min-width: 1025px) {
+    body {
+        padding: 30px;
+    }
+    
+    .name-input-container {
+        max-width: 500px;
+    }
+    
+    .birthday-container {
+        max-width: 700px;
+    }
+    
+    .party-blast-button {
+        margin: 25px 15px;
+    }
+    
+    /* Enhanced hover effects for desktop */
+    .create-button:hover {
+        transform: translateY(-8px) scale(1.08);
+    }
+    
+    .party-blast-button:hover {
+        transform: translateY(-10px) rotate(8deg) scale(1.12);
+    }
+}
+
+/* HIGH DPI DISPLAYS */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .personalized-title,
     .input-title {
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+    
+    .name-input-container,
+    .birthday-container {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(20px);
+    }
+}
+
+/* REDUCED MOTION ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .floating-emoji {
+        animation: none;
+    }
+    
+    .birthday-crown {
+        animation: none;
+    }
+}
+
+/* DARK MODE SUPPORT */
+@media (prefers-color-scheme: dark) {
+    .birthday-wishes {
+        color: #333;
     }
 }
     </style>
