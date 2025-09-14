@@ -174,7 +174,7 @@
         
         <div class="input-group">
             <label for="nameInput">Enter Employee Name:</label>
-            <input type="text" id="nameInput" placeholder="e.g., Rik, Joy, Rohit, Anuj, astha">
+            <input type="text" id="nameInput" placeholder="e.g., Rik, Joy, Rohit, Anuj, Astha">
         </div>
         
         <button onclick="checkEmployee()">Check Employee Details</button>
@@ -189,7 +189,7 @@
             "Joy": 23,
             "Rohit": 24,
             "Anuj": 22,
-            "astha": 22
+            "Astha": 22
         };
 
         // Person class
@@ -197,6 +197,12 @@
             constructor(name, age) {
                 this.name = name;
                 this.age = age;
+            }
+            getName() {
+                return this.name;
+            }
+            getAge() {
+                return this.age;
             }
             
             getInfo() {
@@ -211,7 +217,7 @@
             }
             
             dutyEnd() {
-                return "Duty is off other vish pey fine";
+                return "Duty is off. Staying logged in after duty time will result in a fine.";
             }
             
             breakTime() {
@@ -226,23 +232,23 @@
         // Job class
         class Job {
             programmer() {
-                return "Write code and problem solver";
+                return "Programmer: Write code and solve problems";
             }
             
             manager() {
-                return "Manage the team";
+                return "Manager: Manage the team and coordinate tasks";
             }
             
             designer() {
-                return "Design the UI";
+                return "Designer: Design the UI";
             }
             
             tester() {
-                return "Test the UI";
+                return "Tester: Test the UI";
             }
             
             writer() {
-                return "Write the documentation";
+                return "Writer: Write the documentation";
             }
         }
 
@@ -286,7 +292,7 @@
                     return job.programmer();
                 case "Anuj":
                     return job.tester();
-                case "astha":
+                case "Astha":
                     return job.writer();
                 default:
                     return "No job assigned";
