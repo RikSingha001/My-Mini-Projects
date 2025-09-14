@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rik Tiffin House - Fresh Home-Style Meals</title>
+    <link rel="stylesheet" href="hotel.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">🍽️ Rik Tiffin House</div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#order">Order</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div class="hero" id="home">
+            <h1>Welcome to Rik Tiffin House</h1>
+            <p>Fresh, Home-Style Meals Delivered with Love</p>
+            <div class="time-status" id="timeStatus">⏰ Loading...</div>
+        </div>
+
+        <!-- Lunch Section -->
+        <div id="lunchSection" class="meal-section">
+    <div class="meal-header">
+        <h2 class="meal-title">🍛 Lunch Menu</h2>
+        <div class="meal-time">9:00 AM - 11:00 AM</div>
+    </div>
+<div class="hero" id="menu">
+    <div id="lunchStatus"></div>
+
+    <div id="lunchMenu" style="display: none;">
+        <div class="menu-grid">
+            <div class="base-menu">
+                <h3>🍚 Base Day Meal Includes:</h3>
+                <div class="menu-items">
+                    <div class="menu-item">Rice</div>
+                    <div class="menu-item">Dal (Lentils)</div>
+                    <div class="menu-item">1st Tarka</div>
+                    <div class="menu-item">2nd Tarka</div>
+                    <div class="menu-item">Vegetables</div>
+                    <div class="menu-item">Sweet Chutney</div>
+                </div>
+
+                <!-- 🍽️ Lunch Plate Quantity Input -->
+                <div class="form-group">
+                    <label for="lunchQuantity">🍽️ Lunch Plate (₹50 each)</label>
+                    <input type="number" id="lunchQuantity" name="lunchQuantity" value="1" min="1" onchange="updateLunchQuantity()">
+                </div>
+            </div>
+
+            <div class="base-price">
+                <div class="price-label">Base Price</div>
+                <div class="price-value">₹50</div>
+            </div>
+        </div>
+
+        <div class="special-items">
+            <h3>🌟 Special Add-ons</h3>
+            <div class="special-grid">
+                <div class="special-card" onclick="selectSpecial('fish fry', 30, 'lunch')">
+                    <h4>🐟 Fish Fry</h4>
+                    <div class="special-price">+₹25</div>
+                </div>
+                <div class="special-card" onclick="selectSpecial('chicken curry', 50, 'lunch')">
+                    <h4>🍗 Chicken Curry</h4>
+                    <div class="special-price">+₹35</div>
+                </div>
+                <div class="special-card" onclick="selectSpecial('eggs curry', 15, 'lunch')">
+                    <h4>🥚 Eggs Curry</h4>
+                    <div class="special-price">+₹15</div>
+                </div>
+                <div class="special-card" onclick="selectSpecial('fish curry', 25, 'lunch')">
+                    <h4>🐠 Fish Curry</h4>
+                    <div class="special-price">+₹25</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- Dinner Section -->
+        <div id="dinnerSection" class="meal-section">
+            <div class="meal-header">
+                <h2 class="meal-title">🌙 Dinner Menu</h2>
+                <div class="meal-time">6:00 PM - 9:00 PM</div>
+            </div>
+
+            <div id="dinnerStatus"></div>
+
+            <div id="dinnerMenu" style="display: none;">
+                <div class="menu-grid">
+                    <div class="base-menu">
+                        <h3>🍚 Base Dinner Meal Includes:</h3>
+                        <div class="menu-items">
+                            <div class="menu-item">Roti</div>
+                            <div class="menu-item">Dal (Lentils)</div>
+                        </div>
+
+                        <!-- Extra Roti Input -->
+                        <div class="form-group">
+                            <label for="rotiQuantity">🍞 Extra Roti (₹5 each)</label>
+                            <input type="number" id="rotiQuantity" name="rotiQuantity" value="0" min="0" onchange="updateRotiPrice()">
+                        </div>
+                    </div>
+
+                   
+                </div>
+
+                <div class="special-items">
+                    <h3>🌟 Special Add-ons</h3>
+                    <div class="special-grid">
+                        <div class="special-card" onclick="selectSpecial('chicken curry', 50, 'dinner')">
+                            <h4>🍗 Chicken Curry</h4>
+                            <div class="special-price">+₹50</div>
+                        </div>
+                        
+                        <div class="special-card" onclick="selectSpecial('egg fry', 20, 'dinner')">
+                            <h4>🧀 Eggs Fry</h4>
+                            <div class="special-price">+₹20</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+        <!-- Order Section -->
+        <div class="order-section" id="order">
+            <h2 style="color: #667eea; margin-bottom: 1.5rem; text-align: center; font-size: 2rem;">📱 Place Your Order</h2>
+            
+            <form class="order-form" id="orderForm">
+                <div class="form-group">
+                    <label for="customerName">👤 Full Name</label>
+                    <input type="text" id="customerName" name="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">📞 Mobile Number</label>
+                    <input type="tel" id="customerPhone" name="customerPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerAddress">🏠 Delivery Address</label>
+                    <textarea id="customerAddress" name="customerAddress" rows="3" required></textarea>
+                </div>
+            </form>
+
+            <div class="order-summary" id="orderSummary">
+                <h3>📋 Order Summary</h3>
+                <div id="summaryContent"></div>
+                <button class="btn" onclick="confirmOrder()">🚀 Confirm Order</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer" id="contact">
+            <h3>📍 Contact Us</h3>
+            <p>🏠 Rik Tiffin House - Fresh Home-Style Meals</p>
+            <p>📞 Call us for orders and inquiries</p>
+            <p>🕐 Lunch: 9:00 AM - 11:00 AM | Night Meal: 6:00 PM - 9:00 PM</p>
+            <div id="supportWidget" style="position:fixed;bottom:18px;right:18px;background:#bd5fff;color:#fff;padding:15px 20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.3);font-family:sans-serif;cursor:pointer;z-index:9999;">💜 Contact Me</div><div id="contactBox" style="display:none;position:fixed;bottom:80px;right:18px;background:#fff;color:#333;padding:20px;width:250px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.2);z-index:9999;"><div id="closeBtn" style="position:absolute;top:5px;right:10px;cursor:pointer;font-weight:bold;font-size:18px;">&times;</div><h3 style="margin-top:0;font-family:sans-serif;">Contact Me</h3><form action="https://formspree.io/f/mrblbawn" method="POST"><input type="text" name="name" placeholder="Your name" required style="width:100%;padding:8px;margin-top:8px;border-radius:5px;border:1px solid #ccc;font-family:sans-serif;"><input type="email" name="email" placeholder="Your email" required style="width:100%;padding:8px;margin-top:8px;border-radius:5px;border:1px solid #ccc;font-family:sans-serif;"><textarea name="message" placeholder="Your message" rows="3" required style="width:100%;padding:8px;margin-top:8px;border-radius:5px;border:1px solid #ccc;font-family:sans-serif;"></textarea><button type="submit" style="margin-top:10px;background:#bd5fff;color:#fff;padding:8px;border:none;border-radius:5px;cursor:pointer;width:100%;">Send</button></form></div><script>document.getElementById("supportWidget").onclick=function(){const b=document.getElementById("contactBox");b.style.display=b.style.display==="block"?"none":"block"};document.getElementById("closeBtn").onclick=function(){document.getElementById("contactBox").style.display="none";};</script>
+        </div>
+    </div>
+
+    <script src="hotel.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+import mysql.connector
+from datetime import datetime
+
+# connect to MySQL
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="Riksingha@615",   # your MySQL password
+    database="rik_tiffin"
+)
+cursor = conn.cursor()
+
+# ---------- Meal Selection ----------
+current_time = datetime.now()
+
+# default values
+meal_type = None
+food_name = None
+food_price = 0
+dal_price = 10
+roti_price_per_piece = 5
+roti_count = 0
+total_price = 0
+
+if 9 <= current_time.hour < 11:   # Day meal
+    meal_type = "day"
+    base_meal_price = 50
+    choice = {"fish fry": 25, "chicken curry": 35, "eggs curry": 15, "fish curry": 25}
+    print("✅ Day Meal Menu Open")
+    
+    for i, (food, price) in enumerate(choice.items()):
+        print(f"{i}. {food} - {price} Rs")
+    choice2 = int(input("Enter your choice (0-3): "))
+    
+    if 0 <= choice2 < len(choice):
+        food_name = list(choice.keys())[choice2]
+        food_price = choice[food_name]
+        total_price = base_meal_price + food_price
+    else:
+        print("❌ Invalid choice")
+
+elif 18 <= current_time.hour < 20:   # Night meal
+    meal_type = "night"
+    choice = {"chicken curry": 35, "eggs curry": 15}
+    print("✅ Night Meal Menu Open")
+    
+    for i, (food, price) in enumerate(choice.items()):
+        print(f"{i}. {food} - {price} Rs")
+    choice2 = int(input("Enter your choice (0-1): "))
+    
+    if 0 <= choice2 < len(choice):
+        food_name = list(choice.keys())[choice2]
+        food_price = choice[food_name]
+        
+        roti_count = int(input("Enter how many roti you need: "))
+        total_roti_price = roti_price_per_piece * roti_count
+        total_price = total_roti_price + dal_price + food_price
+    else:
+        print("❌ Invalid choice")
+else:
+    print("⛔ Sorry, meal time is closed.")
+
+# ---------- Insert into MySQL ----------
+if total_price > 0:
+    customer_name = input("Enter your name: ")
+    sql = """
+    INSERT INTO orders (customer_name, meal_type, special_item, roti_count, dal_price, total_price)
+    VALUES (%s, %s, %s, %s, %s, %s)
+    """
+    values = (customer_name, meal_type, food_name, roti_count, dal_price, total_price)
+    cursor.execute(sql, values)
+    conn.commit()
+    print("✅ Order saved successfully!")
+    print("Total Bill:", total_price, "Rs")
+
+# close db
+cursor.close()
+conn.close()
