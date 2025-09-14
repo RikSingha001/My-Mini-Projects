@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+            min-height: 60px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result h3 {
+            color: #667eea;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .result p {
+            margin: 8px 0;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-left: 10px;
+        }
+
+        .status-on {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-off {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-break {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .current-time {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Employee Management System</h1>
+        
+        <div class="current-time" id="currentTime"></div>
+        
+        <div class="input-group">
+            <label for="nameInput">Enter Employee Name:</label>
+            <input type="text" id="nameInput" placeholder="e.g., Rik, Joy, Rohit, Anuj, astha">
+        </div>
+        
+        <button onclick="checkEmployee()">Check Employee Details</button>
+        
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // Employee data
+        const employees = {
+            "Rik": 22,
+            "Joy": 23,
+            "Rohit": 24,
+            "Anuj": 22,
+            "astha": 22
+        };
+
+        // Person class
+        class Person {
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+            }
+            
+            getInfo() {
+                return `The name is ${this.name} and age is ${this.age}`;
+            }
+        }
+
+        // Duty class
+        class Duty {
+            dutyStart() {
+                return "Duty is on";
+            }
+            
+            dutyEnd() {
+                return "Duty is off other vish pey fine";
+            }
+            
+            breakTime() {
+                return "Break time";
+            }
+            
+            secondShift() {
+                return "Second shift";
+            }
+        }
+
+        // Job class
+        class Job {
+            programmer() {
+                return "Write code and problem solver";
+            }
+            
+            manager() {
+                return "Manage the team";
+            }
+            
+            designer() {
+                return "Design the UI";
+            }
+            
+            tester() {
+                return "Test the UI";
+            }
+            
+            writer() {
+                return "Write the documentation";
+            }
+        }
+
+        // Initialize classes
+        const job = new Job();
+        const duty = new Duty();
+
+        // Update current time display
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString();
+            document.getElementById('currentTime').textContent = `Current Date & Time: ${timeString}`;
+        }
+
+        // Get duty status based on current time
+        function getDutyStatus() {
+            const now = new Date();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const currentTime = hour + (minute / 60);
+
+            if (currentTime >= 9 && currentTime < 12) {
+                return { status: duty.dutyStart(), badge: 'status-on' };
+            } else if (currentTime >= 12 && currentTime < 12.5) {
+                return { status: duty.breakTime(), badge: 'status-break' };
+            } else if (currentTime >= 12.5 && currentTime < 17) {
+                return { status: duty.secondShift(), badge: 'status-on' };
+            } else {
+                return { status: duty.dutyEnd(), badge: 'status-off' };
+            }
+        }
+
+        // Get job role based on name
+        function getJobRole(name) {
+            switch(name) {
+                case "Rik":
+                    return job.manager();
+                case "Joy":
+                    return job.designer();
+                case "Rohit":
+                    return job.programmer();
+                case "Anuj":
+                    return job.tester();
+                case "astha":
+                    return job.writer();
+                default:
+                    return "No job assigned";
+            }
+        }
+
+        // Main function to check employee
+        function checkEmployee() {
+            const nameInput = document.getElementById('nameInput');
+            const resultDiv = document.getElementById('result');
+            const name = nameInput.value.trim();
+
+            if (!name) {
+                resultDiv.innerHTML = '<div class="error">Please enter a name!</div>';
+                resultDiv.classList.add('show');
+                return;
+            }
+
+            if (name in employees) {
+                const person = new Person(name, employees[name]);
+                const jobRole = getJobRole(name);
+                const dutyStatus = getDutyStatus();
+
+                resultDiv.innerHTML = `
+                    <h3>Employee Details Found!</h3>
+                    <p><strong>Personal Info:</strong> ${person.getInfo()}</p>
+                    <p><strong>Job Role:</strong> ${jobRole}</p>
+                    <p><strong>Current Status:</strong> ${dutyStatus.status} 
+                       <span class="status-badge ${dutyStatus.badge}">${dutyStatus.status}</span>
+                    </p>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>Employee not found!</strong><br>
+                        The name "${name}" is not in our employee list.<br>
+                        Available employees: ${Object.keys(employees).join(', ')}
+                    </div>
+                `;
+            }
+
+            resultDiv.classList.add('show');
+        }
+
+        // Allow Enter key to trigger search
+        document.getElementById('nameInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkEmployee();
+            }
+        });
+
+        // Initialize
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 1000); // Update every second
+    </script>
+</body>
+</html>
