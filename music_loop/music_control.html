@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player with Loop Control</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .player-container {
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .player-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .file-input-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px dashed #667eea;
+            border-radius: 12px;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: white;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .loop-controls {
+            margin-bottom: 30px;
+        }
+
+        .loop-input {
+            width: 80px;
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+
+        .loop-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .pause-btn {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+        }
+
+        .pause-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 152, 0, 0.3);
+        }
+
+        .stop-btn {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        .stop-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(244, 67, 54, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .status.playing {
+            background: rgba(76, 175, 80, 0.2);
+            color: #2e7d32;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status.paused {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ef6c00;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+
+        .status.stopped {
+            background: rgba(244, 67, 54, 0.2);
+            color: #c62828;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .playing .play-btn {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <h1 class="player-title">🎵 Music Player</h1>
+        
+        <div class="file-input-container">
+            <input type="file" id="audioFile" class="file-input"  title="Choose audio file" accept="audio/*">
+            <p style="margin-top: 10px; font-size: 12px; color: #666;">Choose an audio file to play</p>
+        </div>
+
+        <div class="loop-controls">
+            <label for="loopCount">Play</label>
+            <input type="number" id="loopCount" class="loop-input" min="1" max="100" value="1">
+            <label for="loopCount">time(s)</label>
+            <div class="loop-info">
+                <span id="currentPlay">Current play: 0</span> | 
+                <span id="totalPlays">Total: 0</span>
+            </div>
+        </div>
+
+        <div class="control-buttons">
+            <button id="playBtn" class="play-btn" disabled>▶️ Play</button>
+            <button id="pauseBtn" class="pause-btn" disabled>⏸️ Pause</button>
+            <button id="stopBtn" class="stop-btn" disabled>⏹️ Stop</button>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+
+        <div id="status" class="status">Ready to play music</div>
+
+        <audio id="audioPlayer" preload="auto"></audio>
+    </div>
+
+    <script>
+        const audioFile = document.getElementById('audioFile');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const status = document.getElementById('status');
+        const loopCount = document.getElementById('loopCount');
+        const currentPlay = document.getElementById('currentPlay');
+        const totalPlays = document.getElementById('totalPlays');
+        const progressBar = document.getElementById('progressBar');
+        const currentTime = document.getElementById('currentTime');
+        const duration = document.getElementById('duration');
+        
+        let currentPlayCount = 0;
+        let targetPlayCount = 1;
+        let isPlaying = false;
+        let isPaused = false;
+
+        // Load audio file
+        audioFile.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                audioPlayer.src = url;
+                playBtn.disabled = false;
+                status.textContent = `Loaded: ${file.name}`;
+                status.className = 'status';
+            }
+        });
+
+        // Update progress bar
+        audioPlayer.addEventListener('timeupdate', function() {
+            if (audioPlayer.duration) {
+                const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.style.width = progress + '%';
+                currentTime.textContent = formatTime(audioPlayer.currentTime);
+            }
+        });
+
+        // Update duration when metadata loads
+        audioPlayer.addEventListener('loadedmetadata', function() {
+            duration.textContent = formatTime(audioPlayer.duration);
+        });
+
+        // Handle audio end
+        audioPlayer.addEventListener('ended', function() {
+            currentPlayCount++;
+            currentPlay.textContent = `Current play: ${currentPlayCount}`;
+            
+            if (currentPlayCount < targetPlayCount) {
+                setTimeout(() => {
+                    audioPlayer.currentTime = 0;
+                    audioPlayer.play();
+                    status.textContent = `Playing (${currentPlayCount + 1}/${targetPlayCount})`;
+                }, 500);
+            } else {
+                isPlaying = false;
+                playBtn.disabled = false;
+                pauseBtn.disabled = true;
+                stopBtn.disabled = true;
+                status.textContent = `Completed all ${targetPlayCount} play(s)`;
+                status.className = 'status stopped';
+                document.querySelector('.player-container').classList.remove('playing');
+                progressBar.style.width = '0%';
+                currentTime.textContent = '0:00';
+            }
+        });
+
+        // Play button
+        playBtn.addEventListener('click', function() {
+            if (!isPaused) {
+                targetPlayCount = parseInt(loopCount.value) || 1;
+                currentPlayCount = 0;
+                totalPlays.textContent = `Total: ${targetPlayCount}`;
+            }
+            
+            audioPlayer.play();
+            isPlaying = true;
+            isPaused = false;
+            playBtn.disabled = true;
+            pauseBtn.disabled = false;
+            stopBtn.disabled = false;
+            status.textContent = `Playing (${currentPlayCount + 1}/${targetPlayCount})`;
+            status.className = 'status playing';
+            document.querySelector('.player-container').classList.add('playing');
+        });
+
+        // Pause button
+        pauseBtn.addEventListener('click', function() {
+            if (isPlaying && !audioPlayer.paused) {
+                audioPlayer.pause();
+                isPaused = true;
+                playBtn.disabled = false;
+                status.textContent = `Paused (${currentPlayCount + 1}/${targetPlayCount})`;
+                status.className = 'status paused';
+                document.querySelector('.player-container').classList.remove('playing');
+            }
+        });
+
+        // Stop button
+        stopBtn.addEventListener('click', function() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            isPlaying = false;
+            isPaused = false;
+            currentPlayCount = 0;
+            playBtn.disabled = false;
+            pauseBtn.disabled = true;
+            stopBtn.disabled = true;
+            status.textContent = 'Stopped';
+            status.className = 'status stopped';
+            document.querySelector('.player-container').classList.remove('playing');
+            currentPlay.textContent = 'Current play: 0';
+            progressBar.style.width = '0%';
+            currentTime.textContent = '0:00';
+        });
+
+        // Format time helper
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Update loop count display
+        loopCount.addEventListener('change', function() {
+            if (!isPlaying && !isPaused) {
+                totalPlays.textContent = `Total: ${this.value}`;
+            }
+        });
+    </script>
+</body>
+</html>
