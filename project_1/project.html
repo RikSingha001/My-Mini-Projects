@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Water Gun Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .choice-btn {
+            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            min-width: 120px;
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .choice-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .snake-btn {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a24);
+        }
+
+        .water-btn {
+            background: linear-gradient(145deg, #3742fa, #2f3542);
+        }
+
+        .gun-btn {
+            background: linear-gradient(145deg, #2ed573, #1e90ff);
+        }
+
+        .game-result {
+            margin: 30px 0;
+            font-size: 1.5rem;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .choices-display {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .choice-display {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            min-width: 150px;
+        }
+
+        .choice-display h3 {
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+
+        .choice-icon {
+            font-size: 3rem;
+            margin: 10px 0;
+        }
+
+        .result-message {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .win {
+            background: linear-gradient(145deg, #2ed573, #17c0eb);
+            color: white;
+        }
+
+        .lose {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .tie {
+            background: linear-gradient(145deg, #ffa726, #ff7043);
+            color: white;
+        }
+
+        .score {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .reset-btn {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a24);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: white;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .choices {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .choices-display {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🐍 Snake Water Gun 🔫</h1>
+        
+        <div class="score">
+            <div class="score-item">
+                <div>You</div>
+                <div class="score-number" id="playerScore">0</div>
+            </div>
+            <div class="score-item">
+                <div>Ties</div>
+                <div class="score-number" id="tieScore">0</div>
+            </div>
+            <div class="score-item">
+                <div>Computer</div>
+                <div class="score-number" id="computerScore">0</div>
+            </div>
+        </div>
+
+        <div class="choices">
+            <button class="choice-btn snake-btn" onclick="playGame(1)">
+                🐍 Snake
+            </button>
+            <button class="choice-btn water-btn" onclick="playGame(-1)">
+                💧 Water
+            </button>
+            <button class="choice-btn gun-btn" onclick="playGame(0)">
+                🔫 Gun
+            </button>
+        </div>
+
+        <div class="game-result" id="gameResult">
+            <p>Choose your weapon!</p>
+        </div>
+
+        <div class="choices-display" id="choicesDisplay" style="display: none;">
+            <div class="choice-display">
+                <h3>You Chose</h3>
+                <div class="choice-icon" id="playerChoice"></div>
+                <div id="playerChoiceName"></div>
+            </div>
+            <div class="choice-display">
+                <h3>Computer Chose</h3>
+                <div class="choice-icon" id="computerChoice"></div>
+                <div id="computerChoiceName"></div>
+            </div>
+        </div>
+
+        <button class="reset-btn" onclick="resetGame()">Reset Game</button>
+    </div>
+
+    <script>
+        // Game state
+        let playerScore = 0;
+        let computerScore = 0;
+        let tieScore = 0;
+
+        // Choice mappings (same as your Python code)
+        const choices = {
+            1: { name: "Snake", icon: "🐍" },
+            "-1": { name: "Water", icon: "💧" },
+            0: { name: "Gun", icon: "🔫" }
+        };
+
+        function playGame(playerChoice) {
+            // Computer makes random choice (equivalent to random.choice([1,-1,0]))
+            const computerChoice = [1, -1, 0][Math.floor(Math.random() * 3)];
+            
+            // Display choices
+            displayChoices(playerChoice, computerChoice);
+            
+            // Determine winner (same logic as your Python code)
+            let result;
+            if (playerChoice === computerChoice) {
+                result = "tie";
+                tieScore++;
+            } else if ((playerChoice === 1 && computerChoice === -1) || 
+                      (playerChoice === 0 && computerChoice === -1) || 
+                      (playerChoice === 1 && computerChoice === 0)) {
+                result = "win";
+                playerScore++;
+            } else {
+                result = "lose";
+                computerScore++;
+            }
+            
+            // Display result
+            displayResult(result);
+            
+            // Update scores
+            updateScores();
+        }
+
+        function displayChoices(playerChoice, computerChoice) {
+            const choicesDisplay = document.getElementById('choicesDisplay');
+            const playerChoiceIcon = document.getElementById('playerChoice');
+            const playerChoiceName = document.getElementById('playerChoiceName');
+            const computerChoiceIcon = document.getElementById('computerChoice');
+            const computerChoiceName = document.getElementById('computerChoiceName');
+            
+            playerChoiceIcon.textContent = choices[playerChoice].icon;
+            playerChoiceName.textContent = choices[playerChoice].name;
+            computerChoiceIcon.textContent = choices[computerChoice].icon;
+            computerChoiceName.textContent = choices[computerChoice].name;
+            
+            choicesDisplay.style.display = 'flex';
+        }
+
+        function displayResult(result) {
+            const gameResult = document.getElementById('gameResult');
+            let message, className;
+            
+            switch(result) {
+                case 'win':
+                    message = '🎉 You Win! 🎉';
+                    className = 'win';
+                    break;
+                case 'lose':
+                    message = '😢 You Lose! 😢';
+                    className = 'lose';
+                    break;
+                case 'tie':
+                    message = '🤝 It\'s a Tie! 🤝';
+                    className = 'tie';
+                    break;
+            }
+            
+            gameResult.innerHTML = `<div class="result-message ${className}">${message}</div>`;
+        }
+
+        function updateScores() {
+            document.getElementById('playerScore').textContent = playerScore;
+            document.getElementById('computerScore').textContent = computerScore;
+            document.getElementById('tieScore').textContent = tieScore;
+        }
+
+        function resetGame() {
+            playerScore = 0;
+            computerScore = 0;
+            tieScore = 0;
+            updateScores();
+            
+            document.getElementById('gameResult').innerHTML = '<p>Choose your weapon!</p>';
+            document.getElementById('choicesDisplay').style.display = 'none';
+        }
+
+        // Add some fun sound effects (optional)
+        function playSound(type) {
+            // You could add audio elements and play sounds here
+            // For now, we'll just use visual feedback
+        }
+    </script>
+</body>
+</html>
