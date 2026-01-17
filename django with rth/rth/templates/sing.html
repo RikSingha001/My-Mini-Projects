@@ -1,0 +1,252 @@
+{% extends 'layout_to.html' %}
+
+{% block title %}
+Rik Tiffin House 
+{% endblock %}
+
+{% block content %}
+<style>
+  /* Landing Page Styles */
+
+/* Body and background */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Main heading */
+h1 {
+    color: #ffffff;
+    font-size: 4em;
+    font-weight: 700;
+    margin-bottom: 50px;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+    animation: fadeInDown 1s ease;
+    letter-spacing: 2px;
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeInUp 1s ease;
+}
+
+/* Button styles */
+.btn {
+    padding: 18px 50px;
+    font-size: 1.3em;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Primary button */
+.btn-primary {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    color: #667eea;
+}
+
+.btn-primary:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
+}
+
+.btn-primary:active {
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Button ripple effect */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Floating animation for buttons */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.btn:nth-child(1) {
+    animation: float 3s ease-in-out infinite;
+}
+
+.btn:nth-child(2) {
+    animation: float 3s ease-in-out infinite 0.5s;
+}
+
+/* Background decoration */
+body::before {
+    content: '🍽️';
+    position: absolute;
+    font-size: 15em;
+    opacity: 0.05;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Text center utility */
+.text-center {
+    text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5em;
+        margin-bottom: 40px;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .btn {
+        padding: 15px 40px;
+        font-size: 1.1em;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    body::before {
+        font-size: 8em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        font-size: 1em;
+    }
+}
+
+/* Additional decorative elements */
+.decoration {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.decoration span {
+    position: absolute;
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    animation: animate 15s linear infinite;
+    border-radius: 50%;
+}
+
+.decoration span:nth-child(1) { left: 10%; animation-delay: 0s; }
+.decoration span:nth-child(2) { left: 20%; animation-delay: 2s; }
+.decoration span:nth-child(3) { left: 30%; animation-delay: 4s; }
+.decoration span:nth-child(4) { left: 40%; animation-delay: 1s; }
+.decoration span:nth-child(5) { left: 50%; animation-delay: 3s; }
+.decoration span:nth-child(6) { left: 60%; animation-delay: 5s; }
+.decoration span:nth-child(7) { left: 70%; animation-delay: 2.5s; }
+.decoration span:nth-child(8) { left: 80%; animation-delay: 4.5s; }
+
+@keyframes animate {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) scale(1);
+        opacity: 0;
+    }
+}
+</style>
+  <h1 class="text-center ">Rik Tiffin House</h1>
+
+  <a class="btn btn-primary" href="{% url 'register' %}" >Register</a>
+  <a class="btn btn-primary" href="{% url 'login' %}" >Login</a>
+{% endblock %}

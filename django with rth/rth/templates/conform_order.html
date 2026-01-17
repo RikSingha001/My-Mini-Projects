@@ -1,0 +1,198 @@
+{% extends 'home_body.html' %}
+{% load static %}
+
+{% block title %}Order Confirmed{% endblock %}
+
+{% block content %}
+<style>
+    /* Order Confirmation Page Styles */
+/* Order Confirmation Page Styles */
+
+/* Main heading */
+h2 {
+    color: #667eea;
+    font-size: 2.5em;
+    text-align: center;
+    margin: 30px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Order details container */
+.order-details {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    margin: 20px auto;
+    max-width: 800px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Order info paragraphs */
+p {
+    font-size: 1.2em;
+    margin: 15px 0;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+p strong {
+    color: #667eea;
+    font-weight: 700;
+    display: inline-block;
+    min-width: 150px;
+}
+
+/* Items section heading */
+h3 {
+    color: #764ba2;
+    font-size: 1.8em;
+    margin: 30px 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #667eea;
+}
+
+/* Items list */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+ul li {
+    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    padding: 18px 25px;
+    margin: 12px 0;
+    border-radius: 10px;
+    font-size: 1.15em;
+    font-weight: 500;
+    color: #333;
+    border-left: 5px solid #667eea;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+ul li:hover {
+    transform: translateX(10px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    background: linear-gradient(135deg, #667eea25 0%, #764ba225 100%);
+}
+
+/* View All Orders link */
+a {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 40px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 30px 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Success badge for status */
+p:has(strong:contains("Status")) {
+    border-left-color: #28a745;
+}
+
+/* Price highlight */
+p:has(strong:contains("Total Price")) {
+    background: linear-gradient(135deg, #fff4e6 0%, #ffe4b5 100%);
+    border-left-color: #ffa500;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1.8em;
+        margin: 20px 0;
+    }
+
+    .order-details {
+        padding: 25px 20px;
+        margin: 15px;
+    }
+
+    p {
+        font-size: 1em;
+        padding: 10px 15px;
+    }
+
+    p strong {
+        display: block;
+        min-width: auto;
+        margin-bottom: 5px;
+    }
+
+    h3 {
+        font-size: 1.5em;
+    }
+
+    ul li {
+        padding: 15px 18px;
+        font-size: 1em;
+    }
+
+    a {
+        width: 100%;
+        text-align: center;
+        padding: 12px 20px;
+        font-size: 1.1em;
+    }
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h2, p, h3, ul, a {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+h2 { animation-delay: 0.1s; }
+p { animation-delay: 0.2s; }
+h3 { animation-delay: 0.3s; }
+ul { animation-delay: 0.4s; }
+a { animation-delay: 0.5s; }
+</style>
+
+<h2>✅ Order Confirmed</h2>
+
+<p><strong>Meal Type:</strong> {{ order.meal_type }}</p>
+<p><strong>Total Price:</strong> ₹{{ order.total_price }}</p>
+<p><strong>Status:</strong> {{ order.status }}</p>
+<p><strong>Ordered At:</strong> {{ order.created_at }}</p>
+
+<h3>🍽️ Items</h3>
+<ul>
+    {% for item in order.items.all %}
+        <li>
+            {{ item.item_name }} —
+            ₹{{ item.price }} × {{ item.quantity }}
+            = ₹{{ item.get_subtotal }}
+        </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'booking' %}">📄 View All Orders</a>
+
+{% endblock %}
