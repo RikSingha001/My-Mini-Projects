@@ -111,16 +111,22 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'resort_db',
+#         'USER': 'root',
+#         'PASSWORD': 'Riksingha@615',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+    
+# }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'resort_db',
-        'USER': 'root',
-        'PASSWORD': 'Riksingha@615',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    
-}
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Internationalization
