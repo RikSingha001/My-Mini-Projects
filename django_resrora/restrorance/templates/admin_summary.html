@@ -1,0 +1,191 @@
+{% extends 'layout_to.html' %}
+{% block title %}
+Admin Summary
+{% endblock %}
+{% block content %}
+{% load static %}
+
+<style>
+/* General Styles */
+a {
+    display: inline-block;
+    text-decoration: none;
+    color: #2c5f4f;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border: 2px solid #2c5f4f;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+a:hover {
+    background: #2c5f4f;
+    color: #ffffff;
+}
+
+h2, h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #2c5f4f;
+    text-align: center;
+}
+
+h2 { font-size: 2.5rem; margin-top: 2rem; }
+h3 { font-size: 2rem; margin-top: 2rem; }
+
+/* Paragraph Summary */
+p {
+    max-width: 800px;
+    margin: 0 auto 1rem;
+    background: #ffffff;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    font-size: 1.1rem;
+    color: #2d2d2d;
+    border-left: 4px solid #d4a574;
+    transition: all 0.3s ease;
+}
+p:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+}
+
+/* Table Summary */
+table {
+    max-width: 900px;
+    width: 100%;
+    margin: 2rem auto;
+    border-collapse: collapse;
+    background: #ffffff;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table th {
+    background: linear-gradient(135deg, #2c5f4f, #3d7a66);
+    color: #ffffff;
+    padding: 1rem;
+    text-align: left;
+}
+
+table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    color: #666;
+}
+
+table tr:hover {
+    background: #f8f9fa;
+}
+
+/* Alternate Row Colors */
+table tr:nth-child(even) { background: #f9fafb; }
+table tr:nth-child(even):hover { background: #f1f3f5; }
+
+/* Booking Card */
+div.booking-card {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #ffffff;
+    padding: 1.8rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+    border-left: 4px solid #51cf66;
+    transition: all 0.3s ease;
+}
+div.booking-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+div.booking-card b {
+    color: #2c5f4f;
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+div.booking-card a {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.5rem;
+    background: #51cf66;
+    color: #fff;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+div.booking-card a:hover {
+    background: #40c057;
+}
+
+/* Status Colors */
+.status-full { border-left-color: #ff6b6b; }
+.status-available { border-left-color: #51cf66; }
+
+/* Responsive */
+@media (max-width:768px) {
+    table, table th, table td { font-size: 0.9rem; padding: 0.6rem; }
+    h2 { font-size: 2rem; } h3 { font-size: 1.5rem; }
+    div.booking-card { padding: 1.2rem; }
+}
+</style>
+
+<a href="{% url 'home_page' %}">Back to Home</a> 
+
+<h3>Guest Reviews</h3>
+
+<!-- Paragraph Summary -->
+<h2>Room Summary (Quick View)</h2>
+{% for s in summary %}
+  <p class="{% if s.available == 0 %}status-full{% else %}status-available{% endif %}">
+    <strong>{{ s.name }}</strong> : Booked: {{ s.booked }}, Checked Out: {{ s.checked_out }}, Total: {{ s.total }}
+    {% if s.available == 0 %}
+      (FULL)
+    {% else %}
+      ({{ s.available }} available)
+    {% endif %}
+  </p>
+{% endfor %}
+
+<!-- Table Summary -->
+<h2>Room Summary (Detailed)</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Room Type</th>
+            <th>Total Rooms</th>
+            <th>Booked</th>
+            <th>Checked Out</th>
+            <th>Available</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in summary %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.total }}</td>
+            <td>{{ item.booked }}</td>
+            <td>{{ item.checked_out }}</td>
+            <td>{{ item.available }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<!-- Booking Details -->
+<h2>Booking Details</h2>
+{% for b in bookings %}
+  <div class="booking-card">
+    <b>{{ b.room_type.name }}</b>
+    {{ b.check_in }} → {{ b.check_out }}<br>
+    Status: {{ b.status }}
+    {% if b.status == 'BOOKED' %}
+      <a href="{% url 'check_out' b.id %}">Check Out</a>
+    {% endif %}
+  </div>
+{% empty %}
+  <p class="no-data">No bookings yet.</p>
+{% endfor %}
+
+{% endblock %}

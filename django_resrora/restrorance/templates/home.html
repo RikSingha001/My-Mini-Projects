@@ -1,0 +1,316 @@
+{% extends 'layout_to.html' %}
+{% block title %}
+Home
+{% endblock %}
+{% block content %}
+{% load static %}
+  <link rel="stylesheet" href="{% static 'css/home_body.css' %}">
+    <nav class="navbar">
+        <div class="logo">Baranti Banalata Resort</div>
+       <ul class="nav-links">
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#rooms">Rooms</a></li>
+    {% if user.is_authenticated %}
+    <li>
+        <form method="post" action="{% url 'all_reviews' %}" >
+            {% csrf_token %}
+            <a href="{% url 'all_reviews' %}">Reviews</a>
+        </form>
+    </li>
+    {% else %}
+    <li>
+        <a href="{% url 'login' %}">review</a>
+    </li>
+    {% endif %}
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#dining">Dining</a></li>
+    <li><a href="#contact">Contact</a></li>
+<li>
+        <form method="post" action="{% url 'my_bookings' %}" >
+            {% csrf_token %}
+            <a href="{% url 'my_bookings' %}">My Bookings</a>
+        </form>
+    </li>
+   
+</ul>
+
+        <div class="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+    </nav>
+        <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Escape to Baranti Banalata Resort</h1>
+            <p>Experience luxury and tranquility by the serene lakeside</p>
+            <form method="post" action="{% url 'my_bookings' %}" >
+            {% csrf_token %}
+            <a class="btn-primary" href="{% url 'booking' %}">Book Your Stay</a>
+        </form>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about" class="about">
+        <h2 class="section-title">Welcome to Paradise</h2>
+        <p class="section-subtitle">Where luxury meets nature in perfect harmony</p>
+        <div class="about-content">
+            <div class="about-image">
+                <img src="{% static 'resort/front.jpeg' %}" alt="Baranti Banalata Resort">
+            </div>
+            <div class="about-text">
+                <h2>Your Serene Retreat Awaits</h2>
+                <p>Baranti Banalata Resort (also known as Bonolota Resort) is a serene getaway located in the Purulia district of West Bengal, specifically positioned right beside the tranquil Baranti Lake and Muradi Dam. This resort is highly regarded for its picturesque location, nestled between rolling hills and lush greenery, making it a perfect destination for nature lovers and those seeking a peaceful weekend retreat. The property offers a variety of accommodation options, including comfortable AC deluxe rooms, cottages, and Swiss tents, all designed to provide a rustic yet modern stay experience. Guests often praise the resort for its warm hospitality and authentic Bengali cuisine, which features fresh ingredients, sometimes sourced from their own local farms. Its proximity to the water body allows visitors to enjoy stunning views of the sunrise and sunset over the lake, while the surrounding forests come alive with the vibrant red of Palash flowers during the spring season.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section id="rooms" class="rooms">
+        <h2 class="section-title">Rooms & Suites</h2>
+        <p class="section-subtitle">Discover your perfect sanctuary</p>
+                    {% load static %}
+
+        <div class="rooms-grid">
+
+            <div class="room-card">
+                <div class="room-image">
+                    <img src="{% static 'resort/standadt1.jpeg' %}" alt="Baranti Banalata Resort">
+                </div>
+                <div class="room-details">
+                    <h3> Standard  Room </h3>
+                    <p>Spacious rooms with panoramic lake views, modern amenities, and elegant furnishings for a comfortable stay.</p>
+                    <div class="room-price">From ₹1800/night</div>
+                    <a href="#standadt2" class="btn-secondary">View Details</a>
+                </div>
+            </div>
+            <div class="room-card">
+                <div class="room-image">
+                    <img src="{% static 'resort/dillux1.jpeg' %}" alt="Premium Suite">
+                </div>
+                <div class="room-details">
+                    <h3>Deluxe Room</h3>
+                    <p>Luxurious suites featuring separate living areas, private balconies, and premium comfort for discerning guests.</p>
+                    <div class="room-price">From ₹2999/night</div>
+                    <a href="#dillux2" class="btn-secondary">View Details</a>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Facilities Section -->
+   
+
+    <!-- Dining Section -->
+    <section id="dining" class="dining">
+        <h2 class="section-title">Culinary Excellence</h2>
+        <p class="section-subtitle">A gastronomic journey awaits</p>
+        <div class="dining-content">
+            <div class="dining-text">
+                <h2>Dine in Elegance and Comfort</h2>
+    <p>
+        Experience a unique blend of modern aesthetics and natural beauty at the Baranti Banalata Resort dining hall. 
+        Our spacious and well-lit restaurant features a stunning interior with vibrant, multi-colored LED lighting and 
+        artistically designed ceilings that create a warm and inviting atmosphere for every meal. The elegant marble 
+        flooring and neatly arranged dining tables provide a premium feel, while the large arched windows offer a 
+        breath-taking panoramic view of the lush green fields outside. Whether you are enjoying a traditional Bengali 
+        feast or a quiet cup of coffee, the serene environment and the cool breeze from the nearby Baranti Lake make 
+        every dining moment truly special. It is the perfect place to relax with family and friends after a day of 
+        exploring the scenic hills of Purulia.
+    </p>
+                <a href="javascript:void(0);" class="btn-secondary" id="viewMenuBtn">View Menu</a>
+
+<script>
+document.getElementById("viewMenuBtn").onclick = function() {
+    alert("Our menu changes regularly. To know today’s menu, please contact the restaurant manager.");
+}
+</script>
+
+            </div>
+            <div class="dining-image">
+                <img src="{% static 'resort/dinning.jpg' %}" alt="Lakeside Dining">
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <h2 class="section-title">Gallery</h2>
+        <p class="section-subtitle">Glimpses of paradise</p>
+        <div class="gallery-grid">
+            <div id="standadt2" class="gallery-item">
+                                <img src="{% static 'resort/standadt2.jpeg' %}" alt="Lakeside Dining">
+
+            </div>
+            <div id="standadt2" class="gallery-item">
+                                <img src="{% static 'resort/standadt3.jpeg' %}" alt="Lakeside Dining">
+
+            </div>
+            <div id="dillux2" class="gallery-item"><img src="{% static 'resort/dillux2.jpeg' %}" alt="LakesidivDining"></div>
+            <div id="dillux2" class="gallery-item"><img src="{% static 'resort/dillux3.jpg' %}" alt="Lakeside Dining"></div>
+
+            <div class="gallery-item">
+                <img src="{% static 'resort/dinning.jpeg' %}" alt="1Lakeside Dining">
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'resort/dinning2.jpeg' %}" alt="2Lakeside Dining">
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'resort/hills.jpeg' %}" alt="3Lakeside Dining">
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'resort/resotra.jpeg' %}" alt="4Lakeside Dining">
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'resort/resotra2.jpeg' %}" alt="5Lakeside Dining">
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'resort/sinario.jpeg' %}" alt="6Lakeside Dining">
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'resort/sinario2.jpeg' %}" alt="7Lakeside Dining">
+            </div>
+           
+            <div class="gallery-item">
+                <img src="{% static 'resort/water.jpeg' %}" alt="8Lakeside Dining">
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'resort/watter.jpeg' %}" alt="9Lakeside Dining">
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'resort/watter1.jpeg' %}" alt="10Lakeside Dining">
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+ <section id="testimonials" class="testimonials">
+    <h2 class="section-title">Guest Experiences</h2>
+    <p class="section-subtitle">What our guests say about us</p>
+
+    <iframe
+        src="{% url 'all_reviews' %}"
+        class="testimonial-iframe"
+        title="Guest Reviews"
+        loading="lazy">
+    </iframe>
+</section>
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="section-subtitle">We're here to help plan your perfect getaway</p>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Contact Information</h3>
+                <div class="contact-item">
+                    <strong>Address:</strong>
+                    <p>Paradise Resort, Lakeside Drive<br>Baranti, Santuri Purulia, India 722153 West Bengal<br>India</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Phone:</strong>
+                    <p>+91 78110 92929/ +91 91530 95182</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Email:</strong>
+                    <p>info@paradiseresort.com</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Hours:</strong>
+                    <p>24/7 Reception & Concierge</p>
+                </div>
+             <div class="map-placeholder">
+    <iframe
+        src="https://www.google.com/maps?q=Baranti+Banalata+Resort,+Muradi+Dam,+West+Bengal&output=embed"
+        width="100%"
+        height="300"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+</div>
+            </div>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Paradise Resort</h3>
+                <p>Experience luxury and tranquility in perfect harmony with nature.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">i</a>
+                    <a href="#" class="social-icon">y</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    
+                    <li><a href="#rooms">Accommodations</a></li>
+                    <li><a href="#facilities">Amenities</a></li>
+                    <li><a href="#dining">Dining</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Policies</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Cancellation Policy</a></li>
+                    <li><a href="#">FAQ</a></li>
+{% if user.is_authenticated %}
+<li>
+    <form method="post" action="{% url 'logout' %}" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="footer-link-btn">Logout</button>
+    </form>
+</li>
+{% endif %}
+
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Paradise Resort. All rights reserved. | Designed with ❤️</p>
+        </div>
+        <div class="footer-credit">
+    <p style="text-align:center;" class="footer-credit-text">
+        This website was designed and developed by 
+        <a href="https://riksingha001.github.io/rik-portfolio/" target="_blank" rel="noopener noreferrer">
+            Rik Singha
+        </a>.
+        If you like this design or would like to work together, feel free to connect and contact me through my profile.
+    </p>
+</div>
+    </footer>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'layout_to.html' %}
+{% block title %}
+All Reviews
+{% endblock %}
+{% block content %}
+<style>
+    .single-review {
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid #d4a574;
+    transition: all 0.3s ease;
+}
+
+.single-review:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-left-color: #2c5f4f;
+}
+
+.single-review h4 {
+    color: #2c5f4f;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+.single-review p {
+    color: #666;
+    line-height: 1.8;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.single-review small {
+    color: #999;
+    font-size: 0.85rem;
+    font-style: italic;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* Empty State */
+p:empty,
+body > p {
+    text-align: center;
+    color: #999;
+    font-size: 1.1rem;
+    padding: 3rem;
+    font-style: italic;
+}
+
+/* Alternate Review Card Style (Optional) */
+.single-review:nth-child(even) {
+    background: #f8f9fa;
+}
+
+/* Add Quote Icon Effect (Optional Enhancement) */
+.single-review::before {
+    content: '"';
+    font-size: 4rem;
+    color: #d4a574;
+    opacity: 0.2;
+    position: absolute;
+    margin-left: -1.5rem;
+    margin-top: -1rem;
+    font-family: Georgia, serif;
+}
+
+.single-review {
+    position: relative;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .single-review {
+        margin: 0 1rem 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .single-review h4 {
+        font-size: 1.1rem;
+    }
+
+    .single-review p {
+        font-size: 0.95rem;
+    }
+
+    .single-review::before {
+        font-size: 3rem;
+        margin-left: -1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .single-review {
+        padding: 1.2rem;
+    }
+
+    .single-review h4 {
+        font-size: 1rem;
+    }
+
+    .single-review small {
+        font-size: 0.8rem;
+    }
+}
+</style>
+{% for review in reviews %}
+<div class="single-review">
+    <h4>{{ review.name }}</h4>
+    <p>{{ review.review }}</p>
+    <small>{{ review.created_at }}</small>
+</div>
+{% empty %}
+<p>No reviews yet.</p>
+{% endfor %}
+{% endblock %}
