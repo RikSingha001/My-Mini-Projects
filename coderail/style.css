@@ -1,5 +1,4 @@
-
-        * {
+ * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -40,7 +39,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }.logo {
+        }
+
+        .logo {
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary);
@@ -54,6 +55,7 @@
             height: 40px;
             border-radius: 8px;
         }
+
         nav ul {
             display: flex;
             gap: 2.5rem;
@@ -108,36 +110,43 @@
             color: var(--text-light);
             margin-bottom: 2.5rem;
         }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-trust {
+            margin-top: 1.8rem;
+        }
+
         .satisfaction-btn {
-  display: inline-block;
-  margin-top: 1.2rem;
-  padding: 0.9rem 2rem;
-  border-radius: 10px;
-  background: transparent;
-  border: 2px solid var(--primary);
-  color: var(--primary);
-  font-weight: 700;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
+            display: inline-block;
+            margin-top: 1.2rem;
+            padding: 0.9rem 2rem;
+            border-radius: 10px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
 
-.satisfaction-btn:hover {
-  background: var(--primary);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-.hero-actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
+        .satisfaction-btn:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
 
-.hero-trust {
-  margin-top: 1.8rem;
-}
-
+        .trust-note {
+            margin-top: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
 
         .cta-button {
             display: inline-block;
@@ -163,14 +172,12 @@
             background: transparent;
             color: var(--accent);
             border: 2px solid var(--accent);
-            margin-left: 1rem;
         }
 
         .cta-secondary:hover {
             background: var(--accent);
             color: white;
         }
-        
 
         h2 {
             font-size: 2.5rem;
@@ -212,6 +219,7 @@
         }
 
         .project-image {
+            position: relative;
             width: 100%;
             height: 220px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -240,48 +248,38 @@
         .project-card:nth-child(6) .project-image {
             background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
         }
-        
-        
-        .project-image {
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-}
 
-.project-image img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    display: block;
-}
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
 
-/* clickable demo area */
-.demo-click-area {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    text-decoration: none;
-}
+        .demo-click-area {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            text-decoration: none;
+        }
 
-/* hover hint */
-.click-hint {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
-    font-weight: 600;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
+        .click-hint {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-.project-image:hover .click-hint {
-    opacity: 1;
-}
-
+        .project-image:hover .click-hint {
+            opacity: 1;
+        }
 
         .project-info {
             padding: 1.8rem;
@@ -297,6 +295,26 @@
             color: var(--text-light);
             margin-bottom: 1.2rem;
             font-size: 0.95rem;
+        }
+
+        .demo-credentials {
+            background: var(--bg-alt);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .demo-credentials strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-credentials span {
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .tech-tags {
@@ -352,11 +370,6 @@
             border-width: 3px;
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(147, 197, 253, 0.05) 100%);
         }
-        .contact-subtext {
-    color: var(--text-light);
-    margin-bottom: 2rem;
-}
-
 
         .featured-badge {
             position: absolute;
@@ -472,6 +485,11 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
+        .contact-subtext {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
         .contact-form {
             margin: 2rem auto 0;
             display: flex;
@@ -527,59 +545,6 @@
 
         .footer-links a:hover {
             color: var(--accent);
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            nav ul {
-                gap: 1.5rem;
-            }
-
-            nav .container {
-                padding: 1rem;
-            }
-
-            section {
-                padding: 3rem 1.5rem;
-            }
-
-            .cta-secondary {
-                margin-left: 0;
-                margin-top: 1rem;
-            }
-
-            .portfolio-grid, .pricing-grid {
-                grid-template-columns: 1fr;
-            }
-
-            h2 {
-                font-size: 2rem;
-            }
-
-            .price {
-                font-size: 2.3rem;
-            }
-
-            .modal-content {
-                margin: 10% 1rem;
-                padding: 2rem 1.5rem;
-            }
-
-            .modal h3 {
-                font-size: 1.5rem;
-            }
-
-            .feature-label {
-                min-width: 90px;
-                font-size: 0.9rem;
-            }
         }
 
         .modal {
@@ -646,4 +611,60 @@
             color: var(--primary);
             margin-bottom: 1.5rem;
             font-size: 1.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            nav ul {
+                gap: 1.5rem;
+            }
+
+            nav .container {
+                padding: 1rem;
+            }
+
+            section {
+                padding: 3rem 1.5rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .cta-secondary {
+                margin-left: 0;
+            }
+
+            .portfolio-grid, .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .price {
+                font-size: 2.3rem;
+            }
+
+            .modal-content {
+                margin: 10% 1rem;
+                padding: 2rem 1.5rem;
+            }
+
+            .modal h3 {
+                font-size: 1.5rem;
+            }
+
+            .feature-label {
+                min-width: 90px;
+                font-size: 0.9rem;
+            }
         }
