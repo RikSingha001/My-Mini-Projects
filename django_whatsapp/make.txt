@@ -1,0 +1,63 @@
+python manage.py runserver
+python manage.py makemigrations tweet
+python manage.py migrate
+python manage.py createsuperuser
+Django
+python -m venv env
+env\Scripts\activate
+deactivate
+pip install Django
+django-admin startproject config .
+python manage.py startapp tweet 
+pip install Pillow
+django-admin startproject 
+Python manage.py shell
+pip freeze > 
+requirement.txt
+pip freeze > requirements.txt
+
+python manage.py startapp rth
+python manage.py makemigrations rth
+
+python manage.py makemigrations 
+python manage.py startapp restrorance
+
+app name restrorance
+
+python manage.py makemigrations 
+python manage.py migrate
+python manage.py runserver
+USE resort_db;
+
+INSERT INTO restrorance_roomtype (name, total_rooms)
+VALUES
+('Deluxe', 6),
+('Standard', 6);
+
+UPDATE restrorance_roomtype
+SET total_rooms = 10
+WHERE name = 'Deluxe';
+
+INSERT INTO restrorance_roomtype (name, total_rooms)
+VALUES ('Suite', 4);
+
+http://127.0.0.1:8000/restrorance/adminsummary/
+
+python manage.py startapp whatsapp
+python manage.py makemigrations
+python manage.py makemigrations whatsapp
+python manage.py migrate
+python manage.py runserver
+python manage.py createsuperuser
+http://127.0.0.1:8000/admin/
+
+
+
+python manage.py startapp anime
+env\Scripts\activate
+python manage.py makemigrations
+python manage.py makemigrations anime
+python manage.py migrate
+python manage.py runserver
+
+python -u "...anime\views.py"

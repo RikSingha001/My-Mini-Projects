@@ -1,0 +1,34 @@
+{% extends 'home_body.html' %}
+{% block content %}
+
+<h2>Chat Room</h2>
+<a href="{% url 'home' %}">Back</a>
+
+<div style="height:400px; overflow-y:scroll; border:1px solid gray; padding:10px;">
+    {% for msg in messages %}
+        <div style="margin-bottom:15px;">
+
+            <strong>{{ msg.sender.phone_number }}</strong><br>
+
+            {% if msg.text %}
+                {{ msg.text }}<br>
+            {% endif %}
+
+            {% if msg.photo %}
+                <img src="{{ msg.photo.url }}" width="200"><br>
+            {% endif %}
+
+            <small>{{ msg.timestamp }}</small>
+
+        </div>
+    {% endfor %}
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="text" placeholder="Type message">
+    <input type="file" name="photo">
+    <button type="submit">Send</button>
+</form>
+
+{% endblock %}

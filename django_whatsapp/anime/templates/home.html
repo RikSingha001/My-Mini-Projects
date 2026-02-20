@@ -1,0 +1,64 @@
+{% extends 'home_body.html' %}
+{% block content %}
+
+<p>Welcome to the anime home page!</p>
+
+<h2>Search User</h2> 
+<a href="{% url 'profile' %}">Edit Profile</a>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="phone" placeholder="Enter phone number" required>
+    <button type="submit">Start Chat</button>
+</form>
+
+{% if error %}
+    <p style="color:red;">{{ error }}</p>
+{% endif %}
+
+<hr>
+
+<h3>Your Chats</h3>
+
+{% for room in rooms %}
+
+    {% if room.user1 == request.user %}
+        {% with room.user2 as other %}
+            <div style="display:flex; align-items:center; margin-bottom:10px;">
+
+                {% if other.profile.photo %}
+                    <img src="{{ other.profile.photo.url }}"
+                         width="50"
+                         height="50"
+                         style="border-radius:50%; object-fit:cover; margin-right:10px;">
+                {% endif %}
+
+                <a href="{% url 'chat_room' room.id %}">
+                    {{ other.profile.name|default:other.phone_number }}
+                </a>
+
+            </div>
+        {% endwith %}
+    {% else %}
+        {% with room.user1 as other %}
+            <div style="display:flex; align-items:center; margin-bottom:10px;">
+
+                {% if other.profile.photo %}
+                    <img src="{{ other.profile.photo.url }}"
+                         width="50"
+                         height="50"
+                         style="border-radius:50%; object-fit:cover; margin-right:10px;">
+                {% endif %}
+
+                <a href="{% url 'chat_room' room.id %}">
+                    {{ other.profile.name|default:other.phone_number }}
+                </a>
+
+            </div>
+        {% endwith %}
+    {% endif %}
+
+{% empty %}
+    <p>No chats yet</p>
+{% endfor %}
+
+{% endblock %}

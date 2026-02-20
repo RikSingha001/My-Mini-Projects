@@ -1,0 +1,43 @@
+{% extends 'layout_to.html' %}
+
+{% block content %}
+
+<!-- Admin Button Top Right -->
+<div class="position-absolute top-0 end-0 m-4">
+    <a class="btn btn-outline-dark btn-sm" href="{% url 'admin:index' %}">
+        Admin Login
+    </a>
+</div>
+
+<!-- Main Content -->
+<div class="container text-center mt-5">
+
+    <h1 class="mb-4">WhatsApp-Style Messaging Project</h1>
+
+    <p>
+        Here, I have built a basic WhatsApp-style messaging feature.
+        Users can send and receive messages just like on WhatsApp.
+    </p>
+
+    <p>
+        I implemented a message typing interface similar to WhatsApp.
+        Users can set a profile picture, upload and send images,
+        and set their own name.
+    </p>
+
+    <p>
+        Login is done using a mobile number.
+    </p>
+
+    <p class="mb-4">
+        That’s all I have built so far. No advanced features yet.
+    </p>
+
+    <!-- Centered Login Button -->
+    <a class="btn btn-primary px-5" href="{% url 'login' %}">
+        Login
+    </a>
+
+</div>
+
+{% endblock %}

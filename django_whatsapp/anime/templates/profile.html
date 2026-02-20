@@ -1,0 +1,21 @@
+{% extends 'home_body.html' %}
+{% block content %}
+<a href="{% url 'home' %}">Back</a>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <input type="text" name="name" placeholder="Your name">
+    
+    <input type="file" name="photo">
+    
+    <button type="submit">Save</button>
+</form>
+
+{% if profile %}
+    <h3>Current Profile</h3>
+    <p>Name: {{ profile.name }}</p>
+    {% if profile.photo %}
+        <img src="{{ profile.photo.url }}" width="150">
+    {% endif %}
+{% endif %}
+{% endblock %}
