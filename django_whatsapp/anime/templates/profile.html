@@ -1,22 +1,429 @@
 {% extends 'home_body.html' %}
 {% block content %}
-<a href="{% url 'home' %}">Back</a>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    <input type="text" name="name" placeholder="Your name">
-    
-    <input type="file" name="photo">
-    
-    <button type="submit">Save</button>
-</form>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-{% if profile %}
-    <h3>Current Profile</h3>
-    <p>Name: {{ profile.name }}</p>
-    {% if profile.photo %}
-        <img src="{{ profile.photo.url }}" width="150">
-    {% endif %}
-{% endif %}
+  :root {
+    --bg: #0e1117;
+    --surface: #161b24;
+    --surface-2: #1d2535;
+    --surface-3: #222c3c;
+    --border: rgba(255,255,255,0.07);
+    --accent: #25d366;
+    --accent-glow: rgba(37,211,102,0.18);
+    --text: #eef0f4;
+    --text-muted: #9ca3af;
+    --text-dim: #6b7280;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --radius-pill: 100px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--bg) !important;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Ambient glow ── */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(37,211,102,0.09) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Page wrapper ── */
+  .profile-page {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    margin: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  /* ── Back button ── */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 0.38rem 0.9rem;
+    align-self: flex-start;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+
+  .back-btn:hover {
+    color: var(--accent);
+    border-color: rgba(37,211,102,0.3);
+    background: var(--accent-glow);
+  }
+
+  /* ── Card ── */
+  .profile-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.25rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Top green hairline */
+  .profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--accent), transparent);
+    opacity: 0.45;
+  }
+
+  /* ── Card heading ── */
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+    background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .card-sub {
+    font-size: 0.83rem;
+    color: var(--text-dim);
+    margin-bottom: 1.75rem;
+  }
+
+  /* ── Avatar upload area ── */
+  .avatar-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .avatar-ring {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px dashed rgba(37,211,102,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background: var(--surface-2);
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-ring:hover {
+    border-color: var(--accent);
+    background: var(--surface-3);
+  }
+
+  /* Preview image inside the ring */
+  #avatarPreview {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: none;
+  }
+
+  .avatar-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .avatar-label:hover { color: var(--accent); }
+
+  /* Hidden real file input */
+  .file-input { display: none; }
+
+  /* ── Field ── */
+  .field-wrap {
+    margin-bottom: 1.25rem;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.73rem;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .name-input {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.82rem 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .name-input::placeholder { color: var(--text-dim); }
+
+  .name-input:focus {
+    border-color: rgba(37,211,102,0.4);
+    box-shadow: 0 0 0 3px rgba(37,211,102,0.07);
+  }
+
+  /* ── Save button ── */
+  .save-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #0e1117;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.88rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1),
+                box-shadow 0.2s ease;
+  }
+
+  .save-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.18), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+
+  .save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px var(--accent-glow);
+  }
+
+  .save-btn:hover::before { transform: translateX(100%); }
+  .save-btn:active { transform: scale(0.98); }
+
+  /* ── Current profile card ── */
+  .current-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    animation: fadeUp 0.6s 0.15s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  .current-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1.25rem;
+  }
+
+  .current-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .current-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(37,211,102,0.25);
+    flex-shrink: 0;
+  }
+
+  .current-avatar-placeholder {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .current-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .current-badge {
+    display: inline-block;
+    margin-top: 0.3rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-glow);
+    border: 1px solid rgba(37,211,102,0.15);
+    border-radius: var(--radius-pill);
+    padding: 0.2rem 0.65rem;
+  }
+
+  /* ── File chosen hint ── */
+  .file-hint {
+    font-size: 0.72rem;
+    color: var(--accent);
+    margin-top: 0.4rem;
+    display: none;
+  }
+
+  /* ── Animation ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .profile-card, .current-card { padding: 1.75rem 1.25rem; }
+  }
+</style>
+
+<div class="profile-page">
+
+  <!-- Back -->
+  <a href="{% url 'home' %}" class="back-btn">‹ Back</a>
+
+  <!-- Edit form card -->
+  <div class="profile-card">
+    <h2 class="card-title">Edit Profile</h2>
+    <p class="card-sub">Update your display name and profile photo</p>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- Avatar upload -->
+      <div class="avatar-upload">
+        <label for="photoInput">
+          <div class="avatar-ring">
+            <span id="avatarIcon">🧑</span>
+            <img id="avatarPreview" src="" alt="preview">
+          </div>
+        </label>
+        <label for="photoInput" class="avatar-label">Tap to change photo</label>
+        <input
+          class="file-input"
+          type="file"
+          name="photo"
+          id="photoInput"
+          accept="image/*"
+        >
+        <span class="file-hint" id="fileHint"></span>
+      </div>
+
+      <!-- Name field -->
+      <div class="field-wrap">
+        <label class="field-label" for="nameInput">Display Name</label>
+        <input
+          class="name-input"
+          type="text"
+          id="nameInput"
+          name="name"
+          placeholder="Enter your name…"
+          autocomplete="off"
+        >
+      </div>
+
+      <button class="save-btn" type="submit">Save Changes ✓</button>
+    </form>
+  </div>
+
+  <!-- Current profile preview -->
+  {% if profile %}
+  <div class="current-card">
+    <div class="current-title">Current Profile</div>
+    <div class="current-inner">
+      {% if profile.photo %}
+        <img class="current-avatar" src="{{ profile.photo.url }}" alt="{{ profile.name }}">
+      {% else %}
+        <div class="current-avatar-placeholder">🧑</div>
+      {% endif %}
+      <div>
+        <div class="current-name">{{ profile.name|default:"No name set" }}</div>
+        <span class="current-badge">Active</span>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+  // Live avatar preview on file select
+  const photoInput = document.getElementById('photoInput');
+  const avatarPreview = document.getElementById('avatarPreview');
+  const avatarIcon = document.getElementById('avatarIcon');
+  const fileHint = document.getElementById('fileHint');
+
+  photoInput.addEventListener('change', () => {
+    const file = photoInput.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      avatarPreview.src = url;
+      avatarPreview.style.display = 'block';
+      avatarIcon.style.display = 'none';
+      fileHint.textContent = '📎 ' + file.name;
+      fileHint.style.display = 'block';
+    }
+  });
+</script>
+
 {% endblock %}

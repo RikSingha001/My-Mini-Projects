@@ -1,20 +1,292 @@
 {% extends 'layout_to.html' %}
 
-{% block title %}
-chat{% endblock %}
+{% block title %}chat{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
 {% load static %}
 
-<form method="POST">
-    {% csrf_token %}
-    <input type="text" name="phone" placeholder="Enter phone number" required>
-    <button type="submit">Go to Chat</button>
-</form>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-{% if error %}
-<p style="color:red;">{{ error }}</p>
-{% endif %}
+  :root {
+    --bg: #0e1117;
+    --surface: #161b24;
+    --surface-2: #1d2535;
+    --border: rgba(255,255,255,0.07);
+    --accent: #25d366;
+    --accent-glow: rgba(37,211,102,0.18);
+    --text: #eef0f4;
+    --text-muted: #9ca3af;
+    --text-dim: #6b7280;
+    --danger: #ef4444;
+    --danger-dim: rgba(239,68,68,0.12);
+    --radius: 14px;
+    --radius-sm: 10px;
+    --radius-pill: 100px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--bg) !important;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Ambient glow ── */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(37,211,102,0.10) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Card ── */
+  .login-card {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.75rem 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    margin: 1.5rem;
+    animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  /* Subtle top accent line */
+  .login-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--accent), transparent);
+    border-radius: 1px;
+    opacity: 0.5;
+  }
+
+  /* ── Icon ── */
+  .login-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    border: 1px solid rgba(37,211,102,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin: 0 auto 1.5rem;
+    animation: fadeUp 0.6s 0.1s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  /* ── Heading ── */
+  .login-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin-bottom: 0.4rem;
+    background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeUp 0.6s 0.15s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  .login-sub {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s 0.2s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  /* ── Label ── */
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    animation: fadeUp 0.6s 0.25s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  /* ── Input ── */
+  .phone-input-wrap {
+    position: relative;
+    margin-bottom: 1.25rem;
+    animation: fadeUp 0.6s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  .phone-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .phone-input {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.85rem 1rem 0.85rem 2.75rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.04em;
+  }
+
+  .phone-input::placeholder { color: var(--text-dim); }
+
+  .phone-input:focus {
+    border-color: rgba(37,211,102,0.45);
+    box-shadow: 0 0 0 3px rgba(37,211,102,0.08);
+  }
+
+  /* ── Submit button ── */
+  .login-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #0e1117;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.9rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1),
+                box-shadow 0.2s ease;
+    animation: fadeUp 0.6s 0.35s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  .login-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.18), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+
+  .login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px var(--accent-glow);
+  }
+
+  .login-btn:hover::before { transform: translateX(100%); }
+  .login-btn:active { transform: scale(0.98); }
+
+  /* ── Error ── */
+  .error-box {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--danger-dim);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--danger);
+    animation: fadeUp 0.4s ease both;
+  }
+
+  /* ── Footer note ── */
+  .login-footer {
+    text-align: center;
+    margin-top: 1.75rem;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    animation: fadeUp 0.6s 0.4s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  .login-footer span {
+    color: var(--accent);
+    opacity: 0.8;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .login-card { padding: 2rem 1.5rem; }
+    .login-title { font-size: 1.5rem; }
+  }
+</style>
+
+<div class="login-card">
+
+  <!-- Icon -->
+  <div class="login-icon">📱</div>
+
+  <!-- Heading -->
+  <h1 class="login-title">Welcome Back</h1>
+  <p class="login-sub">Enter your phone number to continue chatting</p>
+
+  <!-- Form -->
+  <form method="POST">
+    {% csrf_token %}
+
+    <label class="field-label" for="phoneInput">Phone Number</label>
+
+    <div class="phone-input-wrap">
+      <span class="phone-icon">☎</span>
+      <input
+        class="phone-input"
+        type="text"
+        id="phoneInput"
+        name="phone"
+        placeholder="+91 00000 00000"
+        required
+        autocomplete="tel"
+      >
+    </div>
+
+    <button class="login-btn" type="submit">Go to Chat →</button>
+
+    {% if error %}
+      <div class="error-box">
+        ⚠ {{ error }}
+      </div>
+    {% endif %}
+  </form>
+
+  <!-- Footer -->
+  <p class="login-footer">
+    <span>🔒</span> Login is secured &amp; private
+  </p>
+
+</div>
 
 {% endblock %}

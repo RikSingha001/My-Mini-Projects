@@ -1,64 +1,395 @@
 {% extends 'home_body.html' %}
 {% block content %}
 
-<p>Welcome to the anime home page!</p>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-<h2>Search User</h2> 
-<a href="{% url 'profile' %}">Edit Profile</a>
-<form method="POST">
-    {% csrf_token %}
-    <input type="text" name="phone" placeholder="Enter phone number" required>
-    <button type="submit">Start Chat</button>
-</form>
+  :root {
+    --bg: #0e1117;
+    --surface: #161b24;
+    --surface-2: #1d2535;
+    --surface-hover: #222c3c;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(37,211,102,0.25);
+    --accent: #25d366;
+    --accent-glow: rgba(37,211,102,0.15);
+    --text: #eef0f4;
+    --text-muted: #9ca3af;
+    --text-dim: #6b7280;
+    --danger: #ef4444;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-pill: 100px;
+  }
 
-{% if error %}
-    <p style="color:red;">{{ error }}</p>
-{% endif %}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<hr>
+  body {
+    background-color: var(--bg) !important;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
 
-<h3>Your Chats</h3>
+  /* ── Page wrapper ── */
+  .home-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+    position: relative;
+    z-index: 1;
+  }
 
-{% for room in rooms %}
+  /* ── Green top glow ── */
+  .home-wrapper::before {
+    content: '';
+    position: fixed;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(37,211,102,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
 
-    {% if room.user1 == request.user %}
+  /* ── Welcome pill ── */
+  .welcome-pill {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-glow);
+    border: 1px solid rgba(37,211,102,0.2);
+    border-radius: var(--radius-pill);
+    padding: 0.35rem 1rem;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  /* ── Section headings ── */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Edit Profile link ── */
+  .edit-profile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 0.4rem 1rem;
+    margin-bottom: 1.5rem;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+
+  .edit-profile-link:hover {
+    color: var(--accent);
+    border-color: rgba(37,211,102,0.3);
+    background: var(--accent-glow);
+  }
+
+  /* ── Search card ── */
+  .search-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.5s 0.1s ease both;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .search-input {
+    flex: 1;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-input::placeholder { color: var(--text-dim); }
+
+  .search-input:focus {
+    border-color: rgba(37,211,102,0.4);
+    box-shadow: 0 0 0 3px rgba(37,211,102,0.08);
+  }
+
+  .search-btn {
+    background: var(--accent);
+    color: #0e1117;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1),
+                box-shadow 0.15s ease;
+  }
+
+  .search-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px var(--accent-glow);
+  }
+
+  .search-btn:active { transform: scale(0.97); }
+
+  /* ── Error message ── */
+  .error-msg {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--danger);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 2rem 0;
+  }
+
+  /* ── Chat list ── */
+  .chat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    animation: fadeUp 0.5s 0.2s ease both;
+  }
+
+  .chat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.9rem 1.2rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chat-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .chat-item:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-hover);
+    transform: translateX(4px);
+    color: var(--text);
+  }
+
+  .chat-item:hover::before { transform: scaleY(1); }
+
+  /* Avatar */
+  .chat-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+    transition: border-color 0.2s;
+  }
+
+  .chat-item:hover .chat-avatar { border-color: rgba(37,211,102,0.4); }
+
+  /* Avatar placeholder */
+  .chat-avatar-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .chat-name {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .chat-arrow {
+    margin-left: auto;
+    color: var(--text-dim);
+    font-size: 1rem;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .chat-item:hover .chat-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+
+  .empty-state-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.4;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .home-wrapper { padding: 2rem 1rem 4rem; }
+    .search-btn { padding: 0.7rem 1rem; font-size: 0.78rem; }
+  }
+</style>
+
+<div class="home-wrapper">
+
+  <!-- Welcome pill -->
+  <div class="welcome-pill">📱 WhatsApp-Style Messenger</div>
+
+  <!-- Edit Profile -->
+  <a href="{% url 'profile' %}" class="edit-profile-link">
+    ✎ Edit Profile
+  </a>
+
+  <!-- Search User -->
+  <div class="section-title">Search User</div>
+
+  <div class="search-card">
+    <form method="POST">
+      {% csrf_token %}
+      <div class="search-row">
+        <input
+          class="search-input"
+          type="text"
+          name="phone"
+          placeholder="Enter phone number…"
+          required
+        >
+        <button class="search-btn" type="submit">Start Chat</button>
+      </div>
+      {% if error %}
+        <p class="error-msg">⚠ {{ error }}</p>
+      {% endif %}
+    </form>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Your Chats -->
+  <div class="section-title">Your Chats</div>
+
+  <div class="chat-list">
+    {% for room in rooms %}
+      {% if room.user1 == request.user %}
         {% with room.user2 as other %}
-            <div style="display:flex; align-items:center; margin-bottom:10px;">
-
-                {% if other.profile.photo %}
-                    <img src="{{ other.profile.photo.url }}"
-                         width="50"
-                         height="50"
-                         style="border-radius:50%; object-fit:cover; margin-right:10px;">
-                {% endif %}
-
-                <a href="{% url 'chat_room' room.id %}">
-                    {{ other.profile.name|default:other.phone_number }}
-                </a>
-
-            </div>
+          <a href="{% url 'chat_room' room.id %}" class="chat-item">
+            {% if other.profile.photo %}
+              <img class="chat-avatar"
+                   src="{{ other.profile.photo.url }}"
+                   alt="{{ other.profile.name|default:other.phone_number }}">
+            {% else %}
+              <div class="chat-avatar-placeholder">
+                {{ other.profile.name|default:other.phone_number|slice:":1"|upper }}
+              </div>
+            {% endif %}
+            <span class="chat-name">{{ other.profile.name|default:other.phone_number }}</span>
+            <span class="chat-arrow">›</span>
+          </a>
         {% endwith %}
-    {% else %}
+      {% else %}
         {% with room.user1 as other %}
-            <div style="display:flex; align-items:center; margin-bottom:10px;">
-
-                {% if other.profile.photo %}
-                    <img src="{{ other.profile.photo.url }}"
-                         width="50"
-                         height="50"
-                         style="border-radius:50%; object-fit:cover; margin-right:10px;">
-                {% endif %}
-
-                <a href="{% url 'chat_room' room.id %}">
-                    {{ other.profile.name|default:other.phone_number }}
-                </a>
-
-            </div>
+          <a href="{% url 'chat_room' room.id %}" class="chat-item">
+            {% if other.profile.photo %}
+              <img class="chat-avatar"
+                   src="{{ other.profile.photo.url }}"
+                   alt="{{ other.profile.name|default:other.phone_number }}">
+            {% else %}
+              <div class="chat-avatar-placeholder">
+                {{ other.profile.name|default:other.phone_number|slice:":1"|upper }}
+              </div>
+            {% endif %}
+            <span class="chat-name">{{ other.profile.name|default:other.phone_number }}</span>
+            <span class="chat-arrow">›</span>
+          </a>
         {% endwith %}
-    {% endif %}
+      {% endif %}
+    {% empty %}
+      <div class="empty-state">
+        <div class="empty-state-icon">💬</div>
+        <p>No chats yet. Search for a user above to get started.</p>
+      </div>
+    {% endfor %}
+  </div>
 
-{% empty %}
-    <p>No chats yet</p>
-{% endfor %}
+</div>
 
 {% endblock %}
