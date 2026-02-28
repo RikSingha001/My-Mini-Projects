@@ -25,12 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-1rn1w$(-amti&fmk*6(l%e7fmz6wwh-0+)1*qex)d8w^0r@24-'
+SECRET_KEY = 'django-insecure-1rn1w$(-amti&fmk*6(l%e7fmz6wwh-0+)1*qex)d8w^0r@24-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["my-mini-projects-3.onrender.com"]
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -90,7 +91,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
      {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
         'OPTIONS': {'min_length': 6},
@@ -102,7 +114,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'whatsapp',
+#         'USER': 'root',
+#         'PASSWORD': 'Riksingha@615',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+    
+# },
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -131,15 +157,35 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# LOGIN_URL = '/account/login/'
+# LOGIN_REDIRECT_URL = '/tweet/'
+# LOGOUT_REDIRECT_URL = '/tweet/'
+# LOGIN_URL = '/account/login/'
 
+# LOGIN_REDIRECT_URL = '/rth/'
+# LOGOUT_REDIRECT_URL = '/rth/'
+
+# LOGIN_URL = '/account/login/'
+# LOGIN_REDIRECT_URL = '/restrorance/'
+# LOGOUT_REDIRECT_URL = '/restrorance/'
+
+# LOGIN_URL = '/account/login/'
+# LOGIN_REDIRECT_URL = '/whatsapp/'
+# LOGOUT_REDIRECT_URL = '/whatsapp/'
+
+# LOGIN_URL = '/anime/'
+# LOGIN_REDIRECT_URL = '/anime/'
+# LOGIN_REDIRECT_URL = '/anime/'
 
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/hanabi/'
 LOGOUT_REDIRECT_URL = '/hanabi/login_view/'
 
 AUTH_USER_MODEL = 'hanabi.User'
-
-
+# AUTH_USER_MODEL = 'anime.User'
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
 
 
 
@@ -149,8 +195,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
-
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-123456")
 
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")

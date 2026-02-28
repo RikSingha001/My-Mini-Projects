@@ -1,0 +1,396 @@
+{% extends 'layout_to.html' %}
+{% block title %}
+logout
+{% endblock %}
+{% block content %}
+<style>* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #1a4d3e;
+    --primary-light: #2c5f4f;
+    --secondary-color: #d4a574;
+    --secondary-dark: #b8915f;
+    --accent-color: #8db596;
+    --accent-light: #a8c9b3;
+    --danger-color: #d32f2f;
+    --danger-dark: #b71c1c;
+    --text-dark: #1a1a1a;
+    --text-medium: #4a4a4a;
+    --text-light: #666;
+    --white: #ffffff;
+    --light-bg: #f8f9fa;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.12);
+    --shadow-lg: 0 10px 40px rgba(0,0,0,0.15);
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    line-height: 1.7;
+    color: var(--text-dark);
+    background: linear-gradient(135deg, rgba(26, 77, 62, 0.05) 0%, rgba(141, 181, 150, 0.08) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(211, 47, 47, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 20s ease-in-out infinite;
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -20%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(141, 181, 150, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 25s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -30px) rotate(120deg); }
+    66% { transform: translate(-20px, 20px) rotate(240deg); }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Georgia', 'Playfair Display', serif;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+}
+
+/* Logout Container */
+.text-center {
+    text-align: center;
+}
+
+/* Main Content Wrapper */
+body > * {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: 24px;
+    padding: 4rem 3rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Warning Border */
+body > *::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--danger-color), #ff6b6b, var(--danger-dark));
+    background-size: 200% 100%;
+    animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Heading */
+h2.text-center {
+    font-size: 2.5rem;
+    color: var(--danger-color);
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 1rem;
+    animation: fadeInDown 0.6s ease;
+}
+
+h2.text-center::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--danger-color), #ff6b6b);
+    border-radius: 2px;
+}
+
+.mb-4 {
+    margin-bottom: 2rem;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Warning Icon (Optional - can be added with ::before) */
+h2.text-center::before {
+    content: '⚠';
+    display: block;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    color: var(--danger-color);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+/* Paragraph Text */
+p.text-center {
+    font-size: 1.15rem;
+    color: var(--text-medium);
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+    animation: fadeIn 0.8s ease 0.2s both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Styling */
+form.text-center {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 2rem;
+    animation: fadeIn 1s ease 0.4s both;
+}
+
+/* Button Base Styles */
+.btn {
+    display: inline-block;
+    padding: 1.1rem 2.8rem;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* Logout Button (Danger) */
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color), var(--danger-dark));
+    color: var(--white);
+    box-shadow: 0 8px 25px rgba(211, 47, 47, 0.35);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #b71c1c, #8b0000);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(183, 28, 28, 0.45);
+}
+
+/* Secondary Button (Cancel) */
+.btn-secondary {
+    background: transparent;
+    color: var(--text-medium);
+    border: 2px solid #ddd;
+    box-shadow: none;
+}
+
+.btn-secondary:hover {
+    background: var(--light-bg);
+    border-color: var(--text-medium);
+    color: var(--text-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Alternative: If you want cancel to use brand colors */
+.btn-secondary.brand-style {
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.btn-secondary.brand-style:hover {
+    background: var(--primary-color);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Button Container for better spacing */
+form.text-center > * {
+    width: 100%;
+}
+
+/* Add submit button if needed */
+button[type="submit"].btn-danger {
+    margin-bottom: 0.5rem;
+}
+
+/* Additional Message Styling (if needed) */
+.logout-message {
+    background: rgba(211, 47, 47, 0.08);
+    border-left: 4px solid var(--danger-color);
+    padding: 1.2rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    animation: fadeIn 1.2s ease 0.6s both;
+}
+
+/* Success message for after logout */
+.success-message {
+    background: rgba(46, 125, 50, 0.08);
+    border-left: 4px solid #2e7d32;
+    padding: 1.2rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body > * {
+        padding: 3.5rem 2.5rem;
+        max-width: 100%;
+        border-radius: 20px;
+    }
+
+    h2.text-center {
+        font-size: 2.2rem;
+    }
+
+    h2.text-center::before {
+        font-size: 3rem;
+    }
+
+    p.text-center {
+        font-size: 1.05rem;
+    }
+
+    .btn {
+        padding: 1rem 2.2rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 1.5rem 1rem;
+    }
+
+    body > * {
+        padding: 3rem 2rem;
+        border-radius: 18px;
+    }
+
+    body > *::before {
+        height: 5px;
+    }
+
+    h2.text-center {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    h2.text-center::before {
+        font-size: 2.5rem;
+        margin-bottom: 0.8rem;
+    }
+
+    p.text-center {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn {
+        padding: 1rem 2rem;
+        font-size: 0.95rem;
+    }
+
+    form.text-center {
+        gap: 1rem;
+    }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}</style>
+  <h2 class="text-center mb-4">Logout</h2>
+  <p class="text-center">Are you sure you want to logout?</p>
+  <form method="post" class="text-center">
+    {% csrf_token %}
+    <a href="{% url 'sing' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}
