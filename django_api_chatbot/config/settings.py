@@ -25,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1rn1w$(-amti&fmk*6(l%e7fmz6wwh-0+)1*qex)d8w^0r@24-'
+# SECRET_KEY = 'django-insecure-1rn1w$(-amti&fmk*6(l%e7fmz6wwh-0+)1*qex)d8w^0r@24-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -144,3 +144,17 @@ AUTH_USER_MODEL = 'hanabi.User'
 
 
 
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv()
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
