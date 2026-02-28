@@ -21,8 +21,6 @@ from django import db
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-1rn1w$(-amti&fmk*6(l%e7fmz6wwh-0+)1*qex)d8w^0r@24-'
@@ -30,7 +28,7 @@ SECRET_KEY = 'django-insecure-1rn1w$(-amti&fmk*6(l%e7fmz6wwh-0+)1*qex)d8w^0r@24-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -114,21 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'whatsapp',
-#         'USER': 'root',
-#         'PASSWORD': 'Riksingha@615',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-    
-# },
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -157,25 +141,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# LOGIN_URL = '/account/login/'
-# LOGIN_REDIRECT_URL = '/tweet/'
-# LOGOUT_REDIRECT_URL = '/tweet/'
-# LOGIN_URL = '/account/login/'
 
-# LOGIN_REDIRECT_URL = '/rth/'
-# LOGOUT_REDIRECT_URL = '/rth/'
-
-# LOGIN_URL = '/account/login/'
-# LOGIN_REDIRECT_URL = '/restrorance/'
-# LOGOUT_REDIRECT_URL = '/restrorance/'
-
-# LOGIN_URL = '/account/login/'
-# LOGIN_REDIRECT_URL = '/whatsapp/'
-# LOGOUT_REDIRECT_URL = '/whatsapp/'
-
-# LOGIN_URL = '/anime/'
-# LOGIN_REDIRECT_URL = '/anime/'
-# LOGIN_REDIRECT_URL = '/anime/'
 
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/hanabi/'

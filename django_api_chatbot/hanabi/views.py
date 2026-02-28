@@ -3,7 +3,6 @@ from urllib import request
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-# from .client import HanabiClient
 from .utils import DetectMood, GenerateReply
 from .models import  ChatRequest, ChatResponse, Task
 
@@ -31,40 +30,6 @@ def login_view(request):
         return redirect("home")
     return render(request, "login.html")
 
-
-# @login_required
-# def home(request):
-#     ai_response = None
-#     error_message = None
-
-#     if request.method == "POST":
-#         user_message = request.POST.get("message")
-
-#         if user_message:
-#             try:
-#                 client = HanabiClient()
-#                 ai_response = client.get_response(user_message)
-
-#                 Ai_Assistant.objects.create(
-#                     user=request.user,
-#                     message=user_message,
-#                     response=ai_response
-#                 )
-
-#             except RateLimitError:
-#                 error_message = "API limit reached. Try again later."
-
-#             except Exception as e:
-#                 error_message = "Something went wrong."
-
-#     chats = Ai_Assistant.objects.filter(
-#         user=request.user
-#     ).order_by("timestamp")
-
-#     return render(request, "home.html", {
-#         "chats": chats,
-#         "error": error_message
-#     })
 
 @login_required
 def home(request):
