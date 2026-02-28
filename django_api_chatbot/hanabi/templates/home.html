@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+{% block title %}Hanabi Chat{% endblock %}
+
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0d0f14;
+    --surface:   #161920;
+    --surface-2: #1e2230;
+    --border:    rgba(255,255,255,0.07);
+    --accent:    #e8c97e;
+    --accent-2:  #d4855a;
+    --user-bg:   linear-gradient(135deg, #2a3050 0%, #1e253d 100%);
+    --text:      #e8e9f0;
+    --muted:     #7a7d8e;
+    --radius:    18px;
+    --shadow:    0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .chat-page {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* ── Header ── */
+  .chat-header {
+    padding: 20px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 0 22px rgba(232,201,126,0.28);
+  }
+
+  .chat-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+  }
+
+  .chat-subtitle {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 10px #4ade80;
+    margin-left: auto;
+    flex-shrink: 0;
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.55; transform: scale(0.82); }
+  }
+
+  /* ── Messages area ── */
+  .chat-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 0 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    scroll-behavior: smooth;
+  }
+
+  .chat-body::-webkit-scrollbar { width: 4px; }
+  .chat-body::-webkit-scrollbar-track { background: transparent; }
+  .chat-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ── Empty state ── */
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-align: center;
+    padding: 48px 20px;
+    opacity: 0.45;
+  }
+
+  .empty-icon { font-size: 3rem; }
+
+  .empty-state p {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+
+  /* ── Chat pair ── */
+  .chat-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeUp 0.35s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Bubbles ── */
+  .bubble {
+    padding: 13px 17px;
+    border-radius: var(--radius);
+    line-height: 1.65;
+    font-size: 0.93rem;
+    max-width: 82%;
+    word-break: break-word;
+    position: relative;
+  }
+
+  .label {
+    font-size: 0.67rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  /* User */
+  .bubble-user {
+    background: var(--user-bg);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    color: #cdd5f5;
+    box-shadow: var(--shadow);
+  }
+
+  .bubble-user::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(255,255,255,0.07);
+    pointer-events: none;
+  }
+
+  .bubble-user .label { color: rgba(180,195,255,0.5); }
+
+  /* AI */
+  .bubble-ai {
+    background: var(--surface);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .bubble-ai .label { color: var(--accent); opacity: 0.8; }
+
+  .reply-secondary {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.87rem;
+    font-style: italic;
+  }
+
+  /* ── Footer / input ── */
+  .chat-footer {
+    padding: 14px 0 20px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .input-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 12px 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+
+  .input-wrap:focus-within {
+    border-color: rgba(232,201,126,0.38);
+    box-shadow: 0 4px 24px rgba(232,201,126,0.07), 0 0 0 3px rgba(232,201,126,0.04);
+  }
+
+  textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.94rem;
+    line-height: 1.6;
+    resize: none;
+    max-height: 140px;
+    min-height: 24px;
+    height: 24px;
+    overflow-y: auto;
+    caret-color: var(--accent);
+  }
+
+  textarea::placeholder { color: var(--muted); }
+  textarea::-webkit-scrollbar { width: 3px; }
+  textarea::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .send-btn {
+    width: 38px; height: 38px;
+    min-width: 38px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #0d0f14;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 14px rgba(232,201,126,0.3);
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 6px 22px rgba(232,201,126,0.45);
+  }
+
+  .send-btn:active { transform: scale(0.94); }
+  .send-btn svg { width: 17px; height: 17px; }
+
+  .input-hint {
+    text-align: center;
+    font-size: 0.67rem;
+    color: var(--muted);
+    margin-top: 8px;
+    opacity: 0.55;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .chat-page { padding: 0 12px; }
+    .chat-title { font-size: 1.25rem; }
+    .chat-header { padding: 16px 0 14px; }
+    .bubble { max-width: 91%; font-size: 0.9rem; padding: 11px 14px; }
+    .send-btn { width: 36px; height: 36px; min-width: 36px; }
+    .input-hint { display: none; }
+    .chat-footer { padding: 12px 0 16px; }
+  }
+
+  @media (max-width: 380px) {
+    .bubble { max-width: 96%; }
+  }
+</style>
+
+<div class="chat-page">
+
+  <!-- Header -->
+  <header class="chat-header">
+    <div class="avatar">🌸</div>
+    <div>
+      <div class="chat-title">Hanabi</div>
+      <div class="chat-subtitle">AI Assistant</div>
+    </div>
+    <div class="status-dot" title="Online"></div>
+  </header>
+
+  <!-- Messages -->
+  <div class="chat-body" id="chatBody">
+    {% for chat in chats %}
+      <div class="chat-pair">
+        <div class="bubble bubble-user">
+          <div class="label">You</div>
+          {{ chat.request.message }}
+        </div>
+        <div class="bubble bubble-ai">
+          <div class="label">Hanabi</div>
+          {{ chat.reply_main }}
+          {% if chat.reply_secondary %}
+            <div class="reply-secondary">{{ chat.reply_secondary }}</div>
+          {% endif %}
+        </div>
+      </div>
+    {% empty %}
+      <div class="empty-state">
+        <div class="empty-icon">🌸</div>
+        <p>Start a conversation with Hanabi</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Input -->
+  <footer class="chat-footer">
+    <form method="POST" id="chatForm">
+      {% csrf_token %}
+      <div class="input-wrap">
+        <textarea
+          id="msgInput"
+          name="message"
+          placeholder="Ask Hanabi anything…"
+          required
+          rows="1"
+        ></textarea>
+        <button type="submit" class="send-btn" aria-label="Send message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      <div class="input-hint">Enter to send &nbsp;·&nbsp; Shift+Enter for new line</div>
+    </form>
+  </footer>
+
+</div>
+
+<script>
+  const textarea = document.getElementById('msgInput');
+  const chatBody = document.getElementById('chatBody');
+
+  // Auto-resize textarea as user types
+  textarea.addEventListener('input', function () {
+    this.style.height = '24px';
+    this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+  });
+
+  // Enter submits, Shift+Enter inserts newline
+  textarea.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      this.form.submit();
+    }
+  });
+
+  // Scroll to the latest message on load
+  if (chatBody) chatBody.scrollTop = chatBody.scrollHeight;
+</script>
+
+{% endblock %}

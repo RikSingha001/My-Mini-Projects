@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+
+{% block title %}Hanabi — Sign In{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0b0d12;
+    --surface:   #13151c;
+    --surface-2: #1a1d28;
+    --border:    rgba(255,255,255,0.07);
+    --accent:    #e8c97e;
+    --accent-2:  #d4855a;
+    --text:      #e8e9f0;
+    --muted:     #6b6e80;
+    --danger:    #f87171;
+    --success:   #4ade80;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    overflow-x: hidden;
+  }
+
+  /* ── Ambient background orbs ── */
+  body::before,
+  body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 16s ease-in-out infinite alternate;
+  }
+
+  body::before {
+    width: 460px; height: 460px;
+    background: radial-gradient(circle, rgba(232,201,126,0.13), transparent 70%);
+    top: -140px; left: -120px;
+  }
+
+  body::after {
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(212,133,90,0.12), transparent 70%);
+    bottom: -100px; right: -80px;
+    animation-delay: -7s;
+  }
+
+  @keyframes drift {
+    from { transform: translate(0,0) scale(1); }
+    to   { transform: translate(30px, 25px) scale(1.06); }
+  }
+
+  /* ── Grid texture ── */
+  body > .grid-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.013) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.013) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* ── Card ── */
+  .login-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 44px 40px 36px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.03),
+      0 24px 64px rgba(0,0,0,0.55),
+      0 4px 16px rgba(0,0,0,0.4);
+      -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    animation: cardIn 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(28px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ── Logo ── */
+  .login-logo {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 28px;
+    box-shadow:
+      0 0 0 10px rgba(232,201,126,0.07),
+      0 0 0 20px rgba(232,201,126,0.03),
+      0 8px 32px rgba(232,201,126,0.3);
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%,100% { box-shadow: 0 0 0 10px rgba(232,201,126,0.07), 0 0 0 20px rgba(232,201,126,0.03), 0 8px 32px rgba(232,201,126,0.3); }
+    50%      { box-shadow: 0 0 0 14px rgba(232,201,126,0.11), 0 0 0 28px rgba(232,201,126,0.05), 0 8px 44px rgba(232,201,126,0.45); }
+  }
+
+  /* ── Headings ── */
+  .login-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    text-align: center;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .login-sub {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  /* ── Form ── */
+  form { display: flex; flex-direction: column; gap: 0; }
+
+  .field-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .input-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0 16px;
+    gap: 10px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 20px;
+  }
+
+  .input-wrap:focus-within {
+    border-color: rgba(232,201,126,0.45);
+    box-shadow: 0 0 0 3px rgba(232,201,126,0.07), 0 4px 20px rgba(232,201,126,0.08);
+  }
+
+  .input-icon {
+    font-size: 1rem;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: color 0.2s;
+    line-height: 1;
+    padding-top: 1px;
+  }
+
+  .input-wrap:focus-within .input-icon { color: var(--accent); }
+
+  .phone-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 15px 0;
+    caret-color: var(--accent);
+    letter-spacing: 0.03em;
+  }
+
+  .phone-input::placeholder { color: var(--muted); font-weight: 300; }
+
+  /* ── Submit button ── */
+  .login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color: #0b0d12;
+    border: none;
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(232,201,126,0.3);
+    transition: transform 0.18s, box-shadow 0.18s;
+    position: relative;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .login-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent 60%);
+    pointer-events: none;
+  }
+
+  .login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 36px rgba(232,201,126,0.48);
+  }
+
+  .login-btn:active { transform: scale(0.97); }
+
+  /* ── Divider ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 22px;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .divider-text {
+    font-size: 0.67rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    opacity: 0.7;
+  }
+
+  /* ── Footer note ── */
+  .login-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    opacity: 0.65;
+    letter-spacing: 0.02em;
+  }
+
+  .login-footer-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+    flex-shrink: 0;
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+  }
+
+  /* ── Staggered child animations ── */
+  .login-logo   { animation-delay: 0.1s;  animation: cardIn 0.55s 0.05s cubic-bezier(0.22,1,0.36,1) both, breathe 4s ease-in-out infinite; }
+  .login-title  { animation: fadeUp 0.45s 0.15s ease both; }
+  .login-sub    { animation: fadeUp 0.45s 0.22s ease both; }
+  form          { animation: fadeUp 0.45s 0.3s  ease both; }
+  .divider      { animation: fadeUp 0.45s 0.38s ease both; }
+  .login-footer { animation: fadeUp 0.45s 0.44s ease both; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 480px) {
+    .login-card {
+      padding: 36px 24px 28px;
+      border-radius: 20px;
+    }
+
+    .login-title { font-size: 1.7rem; }
+    .login-logo  { width: 56px; height: 56px; font-size: 24px; }
+    .phone-input { font-size: 0.95rem; }
+    .login-btn   { padding: 14px; font-size: 0.9rem; }
+  }
+
+  @media (max-width: 360px) {
+    .login-card { padding: 30px 18px 24px; }
+  }
+</style>
+
+<!-- Grid texture layer -->
+<div class="grid-bg"></div>
+
+<div class="login-card">
+
+  <!-- Icon -->
+  <div class="login-logo">🌸</div>
+
+  <!-- Heading -->
+  <h1 class="login-title">Sign In</h1>
+  <p class="login-sub">Enter your phone number to access your chats</p>
+
+  <!-- Form -->
+  <form method="POST">
+    {% csrf_token %}
+
+    <label class="field-label" for="phoneField">Phone Number</label>
+
+    <div class="input-wrap">
+      <span class="input-icon">☎</span>
+      <input
+        class="phone-input"
+        type="text"
+        id="phoneField"
+        name="phone"
+        placeholder="+91 00000 00000"
+        required
+        autocomplete="tel"
+      >
+    </div>
+
+    <button class="login-btn" type="submit">Login →</button>
+  </form>
+
+  <!-- Divider -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-text">secure login</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="login-footer">
+    <div class="login-footer-dot"></div>
+    Your number is never shared with anyone
+  </div>
+
+</div>
+
+{% endblock %}
