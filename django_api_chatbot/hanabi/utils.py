@@ -13,7 +13,7 @@ class DetectMood:
         bored_words = ["bored", "play", "game", "khelte"]
         greetings = ["hello", "hi", "hey"]
         details = ["how are you", "what's up", "how's it going"]
-        who_are_you = ["who are you", "your name", "your creator", "who made you", "who created you", "who is your creator", "who is your maker", "who is your father", "who is your mother", "who is your parent", "who is your owner", "who is your boss", "who is your master","who is your god", "who is your lord", "who is your king", "who is your queen", "who is your prince", "who is your princess", "who is your emperor", "who is your empress", "who is your sultan", "who is your shah", "who is your czar", "who is your tsar", "who is your pharaoh", "who is your deity", "who is your divinity", "who is your supreme being","inventor", "creator", "maker", "father", "mother", "parent", "owner", "boss", "master", "god", "lord", "king", "queen", "prince", "princess", "emperor", "empress", "sultan", "shah", "czar", "tsar", "pharaoh", "deity", "divinity", "supreme being"]
+        who_are_you = ["create","make","who are you", "what's your name", "about you","creator","who made you","who is your creator","inventor","inventor of you","inventing you","who is your inventor" ,"inventing","creating","maker","creating"]
         goodbye = ["bye", "goodbye", "see you"]
         job = ["what can you do", "your job", "your purpose", "your role","job"]
 
