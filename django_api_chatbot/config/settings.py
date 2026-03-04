@@ -144,13 +144,3 @@ AUTH_USER_MODEL = 'hanabi.User'
 
 
 
-import os
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-123456")
-
-
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
