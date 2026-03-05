@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+tweet clone
+{% endblock %}
+
+{% block content %}
+  <h1 class="text-center ">arr you sure to delete {{object.text}}</h1>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">delete</button>
+    <a href="{% url 'tweet_list' %}" class="btn btn-success">back to tweet</a> 
+  </form>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'chat.html' %}
+
+{% block content %}
+<a class="btn btn-primary" href="{% url 'chat_list' %}">&larr; Back to Chat List</a>
+<h2 class="text-center">
+CHAT WITH
+{% for u in chat.users.all %}
+    {% if u != request.user %}
+        {{ u.username }}
+    {% endif %}
+{% endfor %}
+</h2>
+
+<hr>
+
+<div class="chat-messages container row gap-3">
+{% for message in messages %}
+    <div class="{% if message.user == request.user %}text-end{% else %}text-start{% endif %}">
+        <strong>{{ message.user.username }}</strong><br>
+        {{ message.message }}
+    </div>
+    <hr>
+{% empty %}
+    <p class="text-muted text-center">No messages yet</p>
+{% endfor %}
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>
+
+{% endblock %}
