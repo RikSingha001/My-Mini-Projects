@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Political Science Papers</title>
+
+  <style>
+    .year-section {
+      display: none;
+      margin-top: 20px;
+    }
+    body {
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Dropdown */
+select {
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+select:hover {
+  border-color: #007bff;
+}
+
+/* Section box */
+.year-section {
+  display: none;
+  margin-top: 25px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.year-section h2 {
+  margin-bottom: 15px;
+  color: #007bff;
+}
+
+/* File row */
+.year-section a {
+  display: inline-block;
+  margin: 8px 10px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Buttons */
+button {
+  padding: 6px 12px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* Better spacing */
+.year-section br {
+  margin-bottom: 10px;
+  display: block;
+  content: "";
+}
+  </style>
+</head>
+
+<body>
+
+<h1>Political Science Old Paper Downloads</h1>
+
+<select id="yearSelect" onchange="showYear()">
+  <option value="">Select Year</option>
+  <option value="2019">2019</option>
+  <option value="2015">2015</option>
+</select>
+
+<!-- 2019 -->
+<div class="year-section" id="2019">
+  <h2>2019 Papers</h2>
+
+      <a href="2019\PGPS-1.pdf" target="_blank">PGPS-1.pdf</a>
+    <button onclick="downloadPDF('2019\PGPS-1.pdf')">PGPS-1.pdf</button>
+    <a href="2019\PGPS-2.pdf" target="_blank">PGPS-2.pdf</a>
+    <button onclick="downloadPDF('2019\PGPS-2.pdf')">PGPS-2.pdf</button>
+    <a href="2019\PGPS-3.pdf" target="_blank">PGPS-3.pdf</a>
+    <button onclick="downloadPDF('2019\PGPS-3.pdf')">PGPS-3.pdf</button>
+    <a href="2019\PGPS-4.pdf" target="_blank">PGPS-4.pdf</a>
+    <button onclick="downloadPDF('2019\PGPS-4.pdf')">PGPS-4.pdf</button>
+    <a href="2019\PGPS-5.pdf" target="_blank">PGPS-5.pdf</a>
+    <button onclick="downloadPDF('2019\PGPS-5.pdf')">PGPS-5.pdf</button>
+    <a href="2019\PGPS-6.pdf" target="_blank">PGPS-6.pdf</a>
+    <button onclick="downloadPDF('2019\PGPS-6.pdf')">PGPS-6.pdf</button>
+    <a href="2019\PGPS-7.pdf" target="_blank">PGPS-7.pdf</a>
+    <button onclick="downloadPDF('2019\PGPS-7.pdf')">PGPS-7.pdf</button>
+    <a href="2019\PGPS-8.pdf" target="_blank">PGPS-8.pdf</a>
+    <button onclick="downloadPDF('2019\PGPS-8.pdf')">PGPS-8.pdf</button>
+
+</div>
+
+<!-- 2015 -->
+<div class="year-section" id="2015">
+  <h2>2015 Papers</h2>
+
+    <a href="2015\PolSc-1-New.pdf" target="_blank">PolSc-1-New.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-1-New.pdf')">PolSc-1-New.pdf</button>
+    <a href="2015\PolSc-1-Old.pdf" target="_blank">PolSc-1-Old.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-1-Old.pdf')">PolSc-1-Old.pdf</button>
+    <a href="2015\PolSc-2-New.pdf" target="_blank">PolSc-2-New.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-2-New.pdf')">PolSc-2-New.pdf</button>
+    <a href="2015\PolSc-2-Old.pdf" target="_blank">PolSc-2-Old.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-2-Old.pdf')">PolSc-2-Old.pdf</button>
+    <a href="2015\PolSc-3-New.pdf" target="_blank">PolSc-3-New.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-3-New.pdf')">PolSc-3-New.pdf</button>
+    <a href="2015\PolSc-3-Old.pdf" target="_blank">PolSc-3-Old.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-3-Old.pdf')">PolSc-3-Old.pdf</button>
+    <a href="2015\PolSc-4-New.pdf" target="_blank">PolSc-4-New.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-4-New.pdf')">PolSc-4-New.pdf</button>
+    <a href="2015\PolSc-4-Old.pdf" target="_blank">PolSc-4-Old.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-4-Old.pdf')">PolSc-4-Old.pdf</button>
+    <a href="2015\PolSc-5.pdf" target="_blank">PolSc-5-New.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-5.pdf')">PolSc-5-New.pdf</button>
+    <a href="2015\PolSc-6.pdf" target="_blank">PolSc-6-New.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-6.pdf')">PolSc-6-New.pdf</button>
+    <a href="2015\PolSc-7.pdf" target="_blank">PolSc-7-New.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-7.pdf')">PolSc-7-New.pdf</button>
+    <a href="2015\PolSc-8.pdf" target="_blank">PolSc-8-New.pdf</a>
+    <button onclick="downloadPDF('2015\PolSc-8.pdf')">PolSc-8-New.pdf</button>
+
+</div>
+
+<script>
+function showYear() {
+  let selectedYear = document.getElementById("yearSelect").value;
+
+  let sections = document.querySelectorAll(".year-section");
+  sections.forEach(sec => sec.style.display = "none");
+
+  if (selectedYear) {
+    document.getElementById(selectedYear).style.display = "block";
+  }
+}
+
+function downloadPDF(file) {
+  const link = document.createElement("a");
+  link.href = file;
+  link.download = file.split('/').pop();
+  link.click();
+}
+</script>
+
+</body>
+</html>
