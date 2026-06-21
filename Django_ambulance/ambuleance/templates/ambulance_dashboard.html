@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+body{
+    background:#0f0f0f;
+    font-family:Arial;
+}
+
+.container{
+    width:90%;
+    max-width:700px;
+    margin:auto;
+    padding:40px 0;
+}
+
+.card{
+    background:#171717;
+    padding:30px;
+    border-radius:20px;
+    color:white;
+}
+
+.status{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.on{
+    color:#00ff88;
+}
+
+.off{
+    color:#ff4d4d;
+}
+
+.btn{
+    margin-top:25px;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#e63946;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.info{
+    margin-top:15px;
+    color:#ccc;
+    line-height:1.8;
+}
+
+</style>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>
+            🚑 Ambulance Dashboard
+        </h1>
+
+        <div class="info">
+
+            <p>
+                <strong>Driver:</strong>
+                {{ driver.name }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ driver.phone }}
+            </p>
+
+            <p>
+                <strong>Ambulance:</strong>
+                {{ driver.ambulance_number }}
+            </p>
+
+            <p>
+                <strong>Service:</strong>
+                {{ driver.ambulance_service_type }}
+            </p>
+
+        </div>
+
+        <div class="status">
+
+            Status:
+
+            {% if duty_status.is_on_duty %}
+
+                <span class="on">
+                    ON DUTY
+                </span>
+
+            {% else %}
+
+                <span class="off">
+                    OFF DUTY
+                </span>
+
+            {% endif %}
+
+        </div>
+
+        <form method="POST" action="{% url 'ambulance_dashboard' %}">
+
+    {% csrf_token %}
+
+    <button type="submit" class="btn">
+
+        {% if duty_status.is_on_duty %}
+            Turn OFF Duty
+        {% else %}
+            Turn ON Duty
+        {% endif %}
+
+    </button>
+
+</form>
+    </div>
+
+</div>
+
+{% endblock %}

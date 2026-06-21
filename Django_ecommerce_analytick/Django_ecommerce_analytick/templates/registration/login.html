@@ -1,0 +1,298 @@
+{% extends 'layout_to.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+{% load static %}
+<style>
+  /* ── Imports ─────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+
+/* ── Tokens ──────────────────────────────────────────────── */
+:root {
+  --bg:           #F4F2EE;
+  --surface:      #FFFFFF;
+  --surface-2:    #F9F8F5;
+  --border:       rgba(0,0,0,0.09);
+  --border-med:   rgba(0,0,0,0.16);
+
+  --ink:          #1A1916;
+  --ink-2:        #5C5B56;
+  --ink-3:        #9B9A95;
+
+  --accent:       #1D9E75;
+  --accent-bg:    #E1F5EE;
+  --accent-dark:  #0F6E56;
+  --accent-light: #9FE1CB;
+
+  --radius-sm:    8px;
+  --radius-md:    12px;
+  --radius-lg:    18px;
+  --radius-pill:  100px;
+
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+
+/* ── Reset ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Page shell ──────────────────────────────────────────── */
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+/* Subtle grid overlay — matches home page */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(29,158,117,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,158,117,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Card wrapper ────────────────────────────────────────── */
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid var(--border);
+  padding: 2.75rem 2.25rem 2rem;
+}
+
+/* Top accent bar */
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 2rem; right: 2rem;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+
+/* ── Logo / title area ───────────────────────────────────── */
+.login-heading {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-heading .login-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-bg);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.login-heading .login-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--accent-dark);
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.login-heading h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.login-heading p {
+  font-size: 13px;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+/* ── Django form.as_p ────────────────────────────────────── */
+form p {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+
+form p label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+form p input,
+form p select,
+form p textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 0.5px solid var(--border-med);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.875rem;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+form p input:hover,
+form p select:hover {
+  border-color: var(--accent);
+}
+
+form p input:focus,
+form p select:focus,
+form p textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29,158,117,0.12);
+}
+
+/* Help text */
+form p span.helptext {
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+/* Error list */
+form ul.errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+form ul.errorlist li {
+  font-size: 12px;
+  color: #D85A30;
+  background: #FAECE7;
+  border-radius: 5px;
+  padding: 4px 10px;
+  margin-top: 4px;
+}
+
+/* ── Login button ────────────────────────────────────────── */
+.btn.btn-success {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem;
+  width: 100%;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  margin-top: 0.25rem;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn.btn-success:hover  { background: var(--accent-dark); }
+.btn.btn-success:active { transform: scale(0.98); }
+
+/* ── Divider ─────────────────────────────────────────────── */
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 1.25rem 0;
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: var(--border-med);
+}
+
+/* ── Footer / register link ──────────────────────────────── */
+.login-footer {
+  font-size: 13px;
+  color: var(--ink-3);
+  text-align: center;
+  margin-top: 1rem;
+  display: block;
+}
+
+.login-footer .btn.btn-primary {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent-dark);
+  background: var(--accent-bg);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 3px 14px;
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 4px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.login-footer .btn.btn-primary:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 2rem 1.25rem 1.5rem;
+    border-radius: var(--radius-md);
+  }
+}
+</style>
+<div class="login-card">
+
+  <div class="login-heading">
+    <div class="login-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+        <polyline points="10 17 15 12 10 7"/>
+        <line x1="15" y1="12" x2="3" y2="12"/>
+      </svg>
+    </div>
+    <h2>Welcome back</h2>
+    <p>Sign in to your account to continue</p>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Login</button>
+  </form>
+
+  <p class="login-footer">
+    Don't have an account?
+    <a class="btn btn-primary" href="{% url 'register' %}">Register</a>
+  </p>
+
+</div>
+
+{% endblock %}

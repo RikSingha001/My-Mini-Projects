@@ -1,0 +1,333 @@
+{% extends 'base.html' %} 
+{% block title %}
+ web data analysis 
+{% endblock %} 
+{% block content %}
+<style>
+    /* ── Imports ─────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+
+/* ── Tokens ──────────────────────────────────────────────── */
+:root {
+  --bg:          #F4F2EE;
+  --surface:     #FFFFFF;
+  --surface-2:   #F9F8F5;
+  --border:      rgba(0,0,0,0.09);
+  --border-med:  rgba(0,0,0,0.16);
+
+  --ink:         #1A1916;
+  --ink-2:       #5C5B56;
+  --ink-3:       #9B9A95;
+
+  --accent:      #1D9E75;       /* teal-400 */
+  --accent-bg:   #E1F5EE;       /* teal-50  */
+  --accent-dark: #0F6E56;       /* teal-600 */
+
+  --danger:      #D85A30;
+  --danger-bg:   #FAECE7;
+
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+
+/* ── Base ────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+/* ── Page container ──────────────────────────────────────── */
+.container {
+  max-width: 860px;
+  margin: 3rem auto;
+  padding: 2.5rem 2.5rem 3rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid var(--border);
+}
+
+/* ── Heading ─────────────────────────────────────────────── */
+h2.mb-4 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 1.75rem;
+}
+
+/* ── Upload form ─────────────────────────────────────────── */
+form.mb-4 .input-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* File input */
+input[type="file"].form-control {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border: 0.5px solid var(--border-med);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.18s;
+}
+
+input[type="file"].form-control:hover {
+  border-color: var(--accent);
+}
+
+input[type="file"].form-control::file-selector-button {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--accent-bg);
+  color: var(--accent-dark);
+  border: none;
+  border-radius: 5px;
+  padding: 4px 12px;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: background 0.15s;
+}
+
+input[type="file"].form-control::file-selector-button:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Primary button */
+.btn.btn-primary {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 1.4rem;
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn.btn-primary:hover  { background: var(--accent-dark); }
+.btn.btn-primary:active { transform: scale(0.97); }
+
+/* ── Alert ───────────────────────────────────────────────── */
+.alert.alert-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 0.5px solid rgba(216,90,48,0.25);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 14px;
+  margin-top: 1rem;
+}
+
+/* ── Active dataset badge ────────────────────────────────── */
+p.text-success {
+  font-size: 13px;
+  color: var(--accent-dark);
+  background: var(--accent-bg);
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  padding: 4px 12px;
+  margin-top: 0.5rem;
+}
+
+p.text-success strong {
+  font-weight: 600;
+}
+
+/* ── Chart configuration form ────────────────────────────── */
+form.row.g-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  border: 0.5px solid var(--border);
+  padding: 1.5rem;
+  margin-top: 1.75rem;
+}
+
+.col-md-4 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.col-12 {
+  grid-column: 1 / -1;
+}
+
+/* Labels */
+label.form-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Selects */
+select.form-select {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 0.5px solid var(--border-med);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.875rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239B9A95' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+select.form-select:hover  { border-color: var(--accent); }
+select.form-select:focus  {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29,158,117,0.12);
+}
+
+/* Success button (visualize) */
+.btn.btn-success {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ink);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1.6rem;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn.btn-success:hover  { background: #333330; }
+.btn.btn-success:active { transform: scale(0.97); }
+
+/* ── Chart output ────────────────────────────────────────── */
+.text-center.mt-5 {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.text-center.mt-5 h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 1.25rem;
+}
+
+.text-center.mt-5 img.img-fluid {
+  max-width: 100%;
+  border-radius: var(--radius-md);
+  border: 0.5px solid var(--border);
+  display: inline-block;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .container {
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  h2.mb-4 { font-size: 1.5rem; }
+
+  form.mb-4 .input-group { flex-direction: column; align-items: stretch; }
+
+  form.row.g-3 { grid-template-columns: 1fr; }
+
+  .col-12 { grid-column: 1; }
+}
+</style>
+    <div class="container bg-white p-4 rounded shadow">
+        <h2 class="mb-4">Upload and Analyze Your Dataset</h2>
+
+        <form method="POST" enctype="multipart/form-data" class="mb-4">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="file" name="user_file" class="form-control" required>
+                <button type="submit" class="btn btn-primary">Upload & Scan File</button>
+            </div>
+        </form>
+
+        {% if message %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endif %}
+
+        {% if latest_file %}
+            <p class="text-success">Active Dataset: <strong>{{ latest_file.file.name }}</strong></p>
+            
+            <form method="POST" class="row g-3 my-4 p-3 bg-light rounded">
+                {% csrf_token %}
+                <input type="hidden" name="generate_chart" value="true">
+                
+                <div class="col-md-4">
+                    <label class="form-label">Select X-Axis (Categories/Labels)</label>
+                    <select name="x_axis" class="form-select">
+                        {% for col in columns %}
+                            <option value="{{ col }}">{{ col }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Select Y-Axis (Numeric Values)</label>
+                    <select name="y_axis" class="form-select">
+                        {% for col in columns %}
+                            <option value="{{ col }}">{{ col }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Select Chart Type</label>
+                    <select name="chart_type" class="form-select">
+                        <option value="bar">Bar Chart</option>
+                        <option value="line">Line Plot</option>
+                        <option value="scatter">Scatter Plot</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-successw-100">Visualize Data</button>
+                </div>
+            </form>
+        {% endif %}
+
+        {% if chart_image %}
+            <div class="text-center mt-5">
+                <h3>Your Customized Analysis</h3>
+                <img src="data:image/png;base64,{{ chart_image }}" class="img-fluid rounded border shadow-sm" alt="Data Chart">
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

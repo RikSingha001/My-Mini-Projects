@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}`RapidAid {% endblock %}
+
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+ 
+</style>
+
+  <div class="btn-wrap">
+    <a href="{% url 'login' %}" class="btn-primary">
+      book ambulance
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+    <span class="btn-hint">Login to get started — it's free</span>
+  </div>
+
+  
+    <a href="{% url 'hospital_registration' %}" class="btn-primary">
+      hospital registration
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+</div>
+    <a href="{% url 'ambulance_registration' %}" class="btn-primary">
+      ambulance registration
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+<div class="credit">© Rik Singha · RapidAid </div>
+
+{% endblock %}

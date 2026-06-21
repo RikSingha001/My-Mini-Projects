@@ -1,0 +1,217 @@
+{%extends 'base.html'%}
+
+{% block content %}
+{% load static %}
+<style>
+  /* ── Imports ─────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+
+/* ── Tokens ──────────────────────────────────────────────── */
+:root {
+  --bg:          #F4F2EE;
+  --surface:     #FFFFFF;
+  --surface-2:   #F9F8F5;
+  --border:      rgba(0,0,0,0.09);
+  --border-med:  rgba(0,0,0,0.16);
+
+  --ink:         #1A1916;
+  --ink-2:       #5C5B56;
+  --ink-3:       #9B9A95;
+
+  --accent:      #1D9E75;
+  --accent-bg:   #E1F5EE;
+  --accent-dark: #0F6E56;
+
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+
+/* ── Base ────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+/* ── Layout ──────────────────────────────────────────────── */
+.row.justify-content-center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.col-md-6 {
+  width: 100%;
+  max-width: 460px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid var(--border);
+  padding: 2.5rem 2.25rem 2rem;
+}
+
+/* ── Heading ─────────────────────────────────────────────── */
+h2.text-center.mb-4 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+/* ── Django form.as_p fields ─────────────────────────────── */
+form p {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+
+form p label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+form p input,
+form p select,
+form p textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 0.5px solid var(--border-med);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.875rem;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+form p input:hover,
+form p select:hover,
+form p textarea:hover {
+  border-color: var(--accent);
+}
+
+form p input:focus,
+form p select:focus,
+form p textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29,158,117,0.12);
+}
+
+/* Django validation help text */
+form p span.helptext,
+form p .helptext {
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+/* Django error list */
+form ul.errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+form ul.errorlist li {
+  font-size: 12px;
+  color: #D85A30;
+  background: #FAECE7;
+  border-radius: 5px;
+  padding: 4px 10px;
+  margin-top: 4px;
+}
+
+/* ── Sign Up button ──────────────────────────────────────── */
+.btn.btn-primary.w-100 {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem;
+  width: 100%;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  margin-top: 0.5rem;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn.btn-primary.w-100:hover  { background: var(--accent-dark); }
+.btn.btn-primary.w-100:active { transform: scale(0.98); }
+
+/* ── Footer line ─────────────────────────────────────────── */
+.col-md-6 > p {
+  font-size: 13px;
+  color: var(--ink-3);
+  text-align: center;
+  margin-top: 1.25rem;
+  display: block;
+}
+
+/* Login link styled as subtle pill */
+.col-md-6 > p .btn.btn-success {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent-dark);
+  background: var(--accent-bg);
+  border: none;
+  border-radius: 100px;
+  padding: 3px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.col-md-6 > p .btn.btn-success:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .col-md-6 {
+    padding: 1.75rem 1.25rem 1.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  h2.text-center.mb-4 { font-size: 1.6rem; }
+}
+</style>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="text-center mb-4">Register</h2>
+      <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+      </form>
+      <p>don't have an account? <a class="btn btn-success" href="{% url 'login' %}">login</a></p>
+
+    </div>
+  </div>
+{% endblock %}

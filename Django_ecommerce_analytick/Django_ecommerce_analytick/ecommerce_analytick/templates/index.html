@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% block title %}Web Data Analysis{% endblock %}
+
+{% block content %}
+<style>
+    /* ── Imports ─────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@700;800&display=swap');
+
+/* ── Tokens ──────────────────────────────────────────────── */
+:root {
+  --bg:           #F4F2EE;
+  --surface:      #FFFFFF;
+  --surface-2:    #F0EEE9;
+
+  --ink:          #1A1916;
+  --ink-2:        #5C5B56;
+  --ink-3:        #9B9A95;
+
+  --accent:       #1D9E75;
+  --accent-bg:    #E1F5EE;
+  --accent-dark:  #0F6E56;
+  --accent-light: #9FE1CB;
+
+  --radius-sm:    8px;
+  --radius-md:    12px;
+  --radius-lg:    20px;
+  --radius-pill:  100px;
+
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+
+/* ── Reset ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Body / page shell ───────────────────────────────────── */
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Decorative grid lines (CSS background) ──────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(29,158,117,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,158,117,0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Hero section ────────────────────────────────────────── */
+.hero {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+}
+
+.hero-inner {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Badge above heading */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  background: var(--accent-bg);
+  border: 0.5px solid var(--accent-light);
+  border-radius: var(--radius-pill);
+  padding: 5px 14px;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* Main heading */
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: var(--ink);
+}
+
+/* Teal highlight span — wrap key words in <span class="hl"> */
+h1 .hl {
+  color: var(--accent);
+}
+
+/* Subtext */
+.hero p {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--ink-2);
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+/* ── CTA buttons ─────────────────────────────────────────── */
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+/* Shared base */
+.hero-actions a {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1.6rem;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  display: inline-block;
+}
+
+/* Register — filled teal */
+.btn-register {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+
+.btn-register:hover  { background: var(--accent-dark); transform: translateY(-1px); }
+.btn-register:active { transform: scale(0.97); }
+
+/* Login — outlined */
+.btn-login {
+  background: var(--surface);
+  color: var(--ink);
+  border: 0.5px solid rgba(0,0,0,0.18);
+}
+
+.btn-login:hover  { background: var(--surface-2); transform: translateY(-1px); }
+.btn-login:active { transform: scale(0.97); }
+
+/* ── Feature strip ───────────────────────────────────────── */
+.features {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.feature-card {
+  background: var(--surface);
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background 0.15s;
+}
+
+.feature-card:hover {
+  background: var(--accent-bg);
+}
+
+.feature-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  transition: background 0.15s;
+}
+
+.feature-card:hover .feature-icon {
+  background: var(--accent-light);
+}
+
+.feature-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--accent-dark);
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.feature-card p {
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.55;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .hero { padding: 4rem 1rem 3rem; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions a { text-align: center; }
+}
+</style>
+<section class="hero">
+  <div class="hero-inner">
+
+    <span class="hero-badge">Data Analysis Platform</span>
+
+    <h1>Turn raw data into<br><span class="hl">clear insights</span></h1>
+
+    <p>Upload your dataset, pick your axes, and generate beautiful charts — no code required.</p>
+
+    <div class="hero-actions">
+      <a href="{% url 'register' %}" class="btn-register">Get started free</a>
+      <a href="{% url 'login' %}"    class="btn-login">Sign in</a>
+    </div>
+
+  </div>
+</section>
+
+<div class="features">
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    </div>
+    <h3>Upload any CSV</h3>
+    <p>Drop in your spreadsheet and we scan it instantly.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+    </div>
+    <h3>Custom axes</h3>
+    <p>Pick any column for X and Y with one click.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6"  y1="20" x2="6"  y2="14"/></svg>
+    </div>
+    <h3>3 chart types</h3>
+    <p>Bar, line, and scatter — choose what fits your data.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+    </div>
+    <h3>Instant results</h3>
+    <p>Charts render server-side and appear right away.</p>
+  </div>
+
+</div>
+
+{% endblock %}
