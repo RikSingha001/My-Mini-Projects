@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <div class="dashboard-header">
+        <h1>Attendance Dashboard</h1>
+        <p>
+            Welcome to the Attendance Dashboard.
+            Here you can manage your attendance and employee information.
+        </p>
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- Navigation Buttons -->
+    <!-- ===================================== -->
+
+    <div class="dashboard-buttons">
+
+        <a href="{% url 'attendance_sum' %}" class="dashboard-btn">
+            <span class="icon">📸</span> Mark Attendance
+        </a>
+
+        <a href="{% url 'attendance_out' %}" class="dashboard-btn outline-btn">
+            <span class="icon">⏱️</span> Attendance Out
+        </a>
+
+        <a href="{% url 'attendance_history' %}" class="dashboard-btn">
+            <span class="icon">📋</span> Attendance History
+        </a>
+
+        
+
+        <a href="{% url 'profile' %}" class="dashboard-btn">
+            <span class="icon">👤</span> My Profile
+        </a>
+
+        <a href="{% url 'leave_application' %}" class="dashboard-btn">
+            <span class="icon">📝</span> Leave Application
+        </a>
+
+        <a href="{% url 'resign_application' %}" class="dashboard-btn">
+            <span class="icon">📤</span> Resignation
+        </a>
+
+        <a href="{% url 'login_logout_history' %}" class="dashboard-btn">
+            <span class="icon">🔐</span> Login / Logout History
+        </a>
+
+        <a href="{% url 'logout' %}" class="dashboard-btn logout-btn">
+            <span class="icon">🚪</span> Logout
+        </a>
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- Attendance Records -->
+    <!-- ===================================== -->
+
+    <div id="attendanceRecords" class="records-section">
+
+        <h2>Your Attendance Records</h2>
+
+        <div class="attendance-header">
+            <span>Date</span>
+            <span>Status</span>
+            <a href="{% url 'attendance_history' %}" class="view-all-link">
+                View All
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================== -->
+<!-- CSS (Mobile First) -->
+<!-- ===================================== -->
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+/* ============================= */
+/* Base layout - mobile default */
+/* ============================= */
+
+.dashboard {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.dashboard-header {
+    margin-bottom: 20px;
+}
+
+.dashboard-header h1 {
+    font-size: 20px;
+    margin-bottom: 6px;
+    color: #1f2937;
+}
+
+.dashboard-header p {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* ============================= */
+/* Buttons - mobile: single column */
+/* ============================= */
+
+.dashboard-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.dashboard-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 10px;
+    text-align: center;
+    text-decoration: none;
+    background: #2f80ed;
+    color: white;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.dashboard-btn .icon {
+    font-size: 16px;
+}
+
+.dashboard-btn:active {
+    background: #1366d6;
+}
+
+/* Attendance Out - outline style to stand out from primary actions */
+.outline-btn {
+    background: #ffffff;
+    color: #2f80ed;
+    border: 2px solid #2f80ed;
+}
+
+.outline-btn:active {
+    background: #eaf2ff;
+}
+
+/* Logout */
+.logout-btn {
+    background: #d9534f;
+}
+
+.logout-btn:active {
+    background: #c9302c;
+}
+
+
+/* ============================= */
+/* Attendance Records - mobile */
+/* ============================= */
+
+.records-section {
+    margin-top: 26px;
+}
+
+.records-section h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #1f2937;
+}
+
+.attendance-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.attendance-header span {
+    font-weight: 600;
+    color: #374151;
+}
+
+.view-all-link {
+    text-decoration: none;
+    font-weight: bold;
+    color: #2f80ed;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.view-all-link:active {
+    color: #1366d6;
+}
+
+
+/* ============================= */
+/* Tablet and up */
+/* ============================= */
+
+@media (min-width: 600px) {
+
+    .dashboard {
+        padding: 24px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-header p {
+        font-size: 14px;
+    }
+
+    .dashboard-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin-top: 26px;
+    }
+
+    .dashboard-btn {
+        padding: 15px;
+        font-size: 15px;
+    }
+
+    .dashboard-btn:hover {
+        background: #1366d6;
+        transform: translateY(-2px);
+    }
+
+    .outline-btn:hover {
+        background: #eaf2ff;
+        color: #1366d6;
+        border-color: #1366d6;
+        transform: translateY(-2px);
+    }
+
+    .logout-btn:hover {
+        background: #c9302c;
+    }
+
+    .attendance-header {
+        grid-template-columns: 1fr 1fr 120px;
+        padding: 15px;
+    }
+
+    .view-all-link:hover {
+        color: #1366d6;
+    }
+}
+
+
+/* ============================= */
+/* Desktop and up */
+/* ============================= */
+
+@media (min-width: 900px) {
+
+    .dashboard-buttons {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+}
+
+</style>
+
+{% endblock %}

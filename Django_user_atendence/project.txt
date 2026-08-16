@@ -1,0 +1,148 @@
+Django দিয়ে মোবাইল ক্যামেরাভিত্তিক একটি অ্যাটেনডেন্স সিস্টেম তৈরি করা বেশ চমৎকার এবং বাস্তবসম্মত প্রজেক্ট! মোবাইল ব্রাউজার থেকেই যেন ব্যবহারকারী সহজে ছবি তুলে অ্যাটেনডেন্স দিতে পারেন, সেজন্য পুরো সিস্টেমকে কীভাবে সাজাবেন তার একটি পূর্ণাঙ্গ গাইড নিচে দেওয়া হলো:
+
+---
+
+## ১. প্রয়োজনীয় ফিচারসমূহ (Key Features)
+
+প্রজেক্টটিকে মানসম্মত করতে এই ফিচারগুলো যুক্ত করতে পারেন:
+
+* **ব্যবহারকারী রেজিস্ট্রেশন ও ফেস এনরোলমেন্ট:**
+* ইউজার (কর্মচারী বা শিক্ষার্থী) রেজিস্ট্রেশনের সময় তার মুখের ৩–৫টি স্পষ্ট ছবি তুলে ডাটাবেজে সেভ করতে হবে, যাতে সিস্টেম তার চেহারা সহজে চিনতে পারে।
+
+
+* **ক্যামেরা থেকে অ্যাটেনডেন্স:**
+* মোবাইল ক্যামেরা সরাসরি ওপেন করে ইনস্ট্যান্ট ছবি তোলার সুবিধা।
+* ছবি তোলার সাথে সাথেই ফেসিয়াল রেকগনিশন (Facial Recognition) এর মাধ্যমে ইউজার আইডেন্টিফাই করা।
+
+
+* **লাইভনেস ডিটেকশন (Liveness Detection - ভুয়া অ্যাটেনডেন্স রোধে):**
+* কেউ যেন অন্যের পাসপোর্টের বা মোবাইল স্ক্রিনের ছবি দেখিয়ে অ্যাটেনডেন্স দিতে না পারে, সেটার জন্য চোখ পিটপিট করা বা সামান্য মাথা নাড়ানোর মতো সিম্পল লাইভনেস চেক রাখা।
+
+
+* **লোকেশন চেক (Geo-fencing / GPS):**
+* মোবাইল থেকে ছবি তোলার সময় ডিভাইসের GPS লোকেশন নেওয়া। অফিস বা ক্যাম্পাসের নির্দিষ্ট ব্যাসার্ধের (Radius) বাইরে থাকলে অ্যাটেনডেন্স ব্লক করে দেওয়া।
+
+
+* **ড্যাশবোর্ড ও রিপোর্ট:**
+* **ইউজার ড্যাশবোর্ড:** নিজের দৈনিক/মাসিক উপস্থিতি দেখা।
+* **এডমিন ড্যাশবোর্ড:** সবার অ্যাটেনডেন্স শিট দেখা, এক্সেল বা PDF ফাইল ফরম্যাটে ডাউনলোড করা।
+
+
+* **নোটিফিকেশন:**
+* অ্যাটেনডেন্স সফল হলে কনফার্মেশন মেসেজ বা ইমেইল দেওয়া।
+
+
+
+---
+
+## ২. ব্যবহৃত টেকনোলজি ও লাইব্রেরি
+
+| অংশ | টেকনোলজি / লাইব্রেরি |
+| --- | --- |
+| **Backend** | Python, Django / Django REST Framework |
+| **Frontend** | HTML5, JavaScript (MediaDevices API), Bootstrap / Tailwind |
+| **Facial Recognition** | `face_recognition` (Python library), OpenCV |
+| **Database** | SQLite (শুরুতে) / PostgreSQL (প্রোডাকশনের জন্য) |
+
+---
+
+## ৩. কিভাবে স্টেপ-বাই-স্টেপ করবেন?
+
+### ধাপ ১: প্রজেক্ট সেটআপ ও লাইব্রেরি ইনস্টল
+
+প্রথমে একটি ভার্চুয়াল এনভায়রনমেন্ট তৈরি করে প্রয়োজনীয় প্যাকেজ ইনস্টল করুন:
+
+```bash
+pip install django opencv-python face-recognition pillow numpy
+
+```
+
+### ধাপ ২: ডাটাবেজ মডেল তৈরি (`models.py`)
+
+মূলত দুটি মডেল লাগবে—একটি প্রোফাইল এবং অন্যটি অ্যাটেনডেন্স রেকর্ড:
+
+```python
+from django.db import models
+from django.contrib.auth.models import User
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    face_encoding = models.BinaryField(null=True, blank=True) # ফেস ডাটা সেভ রাখার জন্য
+
+class Attendance(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, default='Present')
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+
+```
+
+### ধাপ ৩: ফ্রন্টএন্ডে মোবাইল ক্যামেরা ইন্টিগ্রেশন
+
+মোবাইলের ক্যামেরা থেকে সরাসরি লাইভ ভিডিও স্ট্রিম বা ছবি নিতে HTML5 এবং JavaScript ব্যবহার করুন:
+
+```html
+<!-- ক্যামেরা স্ক্রিন -->
+<video id="webcam" autoplay playsinline width="300" height="300"></video>
+<button onclick="takeSnapshot()">ছবি তুলুন ও অ্যাটেনডেন্স দিন</button>
+<canvas id="canvas" style="display:none;"></canvas>
+
+<script>
+  // মোবাইল ব্যাক/ফ্রন্ট ক্যামেরা এক্সেস করা
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    .then(stream => { document.getElementById('webcam').srcObject = stream; });
+
+  function takeSnapshot() {
+    let canvas = document.getElementById('canvas');
+    let video = document.getElementById('webcam');
+    canvas.getContext('2d').drawImage(video, 0, 0, 300, 300);
+    let imageData = canvas.toDataURL('image/jpeg'); // Base64 ফরম্যাটে ব্যাকএন্ডে পাঠানো
+    // AJAX বা Fetch API দিয়ে Django backend-এ পাঠাবেন
+  }
+</script>
+
+```
+
+### ধাপ ৪: ব্যাকএন্ডে ফেস ম্যাচিং লজিক (`views.py`)
+
+ক্যামেরা থেকে পাওয়া ছবি ব্যাকএন্ডে রিসিভ করে ডাটাবেজের `face_encoding`-এর সাথে এনকোডিং ডিস্টেন্স তুলনা করতে হবে:
+
+```python
+import face_recognition
+import numpy as np
+import base64
+from django.core.files.base import ContentFile
+
+def process_attendance(request):
+    if request.method == 'POST':
+        image_data = request.POST.get('image') # Base64 Image
+        # Base64 থেকে ইমেজে কনভার্ট
+        format, imgstr = image_data.split(';base64,')
+        captured_image = face_recognition.load_image_file(ContentFile(base64.b64decode(imgstr)))
+        
+        # ধরা যাক ফ্রন্টএন্ডে ক্যাপচার করা ছবির এনকোডিং পাওয়া গেল
+        captured_encodings = face_recognition.face_encodings(captured_image)
+        
+        if captured_encodings:
+            unknown_encoding = captured_encodings[0]
+            # ডাটাবেজের নিবন্ধিত ইউজারদের সাথে ম্যাচ করানো
+            for profile in UserProfile.objects.all():
+                known_encoding = np.frombuffer(profile.face_encoding)
+                matches = face_recognition.compare_faces([known_encoding], unknown_encoding, tolerance=0.5)
+                
+                if matches[0]:
+                    # ইউজার মিলে গেছে -> Attendance রেকর্ড সেভ করুন
+                    Attendance.objects.create(user=profile.user)
+                    return JsonResponse({'status': 'success', 'message': f'Welcome {profile.user.username}'})
+                    
+        return JsonResponse({'status': 'failed', 'message': 'চেহারা চেনা যায়নি!'})
+
+```
+
+---
+
+## ৪. কিছু বিষয়ে বিশেষ খেয়াল রাখবেন
+
+1. **HTTPS সিকিউরিটি:** মোবাইলের ব্রাউজার থেকে ক্যামেরা এক্সেস (`getUserMedia`) পেতে হলে আপনার সাইটে অবশ্যই **HTTPS/SSL Certificate** থাকতে হবে (লোকালহোস্টে কাজ করলেও লাইভ সার্ভারে SSL ছাড়া ক্যামেরা কাজ করবে না)।
+2. **Tolerance লেভেল:** `face_recognition.compare_faces`-এ `tolerance` মান যত কমাবেন (যেমন: 0.45 или 0.50), মিল খোঁজার কড়াকড়ি তত বাড়বে।

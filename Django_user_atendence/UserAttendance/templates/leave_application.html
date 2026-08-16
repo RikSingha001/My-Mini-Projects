@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+
+{% block title %}Leave{% endblock %}
+
+{% block content %}
+
+<div class="leave-page">
+
+    <h2>Leave Application</h2>
+
+    <a href="{% url 'dashboard' %}" class="back-link">← Go to Dashboard</a>
+
+    <!-- ===================================== -->
+    <!-- Leave Balance -->
+    <!-- ===================================== -->
+
+    <section class="leave-card">
+
+        <h3>My Leave Balance</h3>
+
+        <div class="table-wrapper">
+
+            <table class="leave-table balance-table">
+
+                <tr>
+                    <th>Casual Leave</th>
+                    <th>Earned Leave</th>
+                    <th>Sick Leave</th>
+                    <th>Total</th>
+                </tr>
+
+                <tr>
+                    <td>{{ leave_balance.cl }}</td>
+                    <td>{{ leave_balance.el }}</td>
+                    <td>{{ leave_balance.sl }}</td>
+                    <td>{{ leave_balance.total_leave }}</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- Apply for Leave -->
+    <!-- ===================================== -->
+
+    <section class="leave-card">
+
+        <h3>Apply for Leave</h3>
+
+        <form method="POST" class="leave-form">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary">
+                Apply Leave
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- Leave History -->
+    <!-- ===================================== -->
+
+    <section class="leave-card">
+
+        <h3>My Leave Applications</h3>
+
+        <div class="table-wrapper">
+
+            <table class="leave-table">
+
+                <tr>
+                    <th>Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Days</th>
+                    <th>Status</th>
+                    <th>Applied</th>
+                </tr>
+
+                {% for leave in leave_history %}
+
+                <tr>
+
+                    <td>{{ leave.get_leave_type_display }}</td>
+
+                    <td>{{ leave.start_date }}</td>
+
+                    <td>{{ leave.end_date }}</td>
+
+                    <td>{{ leave.days }}</td>
+
+                    <td>
+                        <span class="status-badge status-{{ leave.status|lower }}">
+                            {{ leave.status }}
+                        </span>
+                    </td>
+
+                    <td>{{ leave.applied_at }}</td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="6" class="no-records">
+                        No leave applications found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     CSS (Mobile First)
+========================================================= -->
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #f4f5f7;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #1f2937;
+}
+
+.leave-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.leave-page h2 {
+    font-size: 20px;
+    color: #4338ca;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.back-link {
+    display: inline-block;
+    text-decoration: none;
+    color: #4f46e5;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+/* ============================= */
+/* Card container */
+/* ============================= */
+
+.leave-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+}
+
+.leave-card h3 {
+    font-size: 16px;
+    color: #4338ca;
+    margin-bottom: 12px;
+}
+
+/* ============================= */
+/* Table wrapper - horizontal scroll
+   on small screens */
+/* ============================= */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+}
+
+.leave-table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.balance-table {
+    min-width: 400px;
+}
+
+.leave-table th {
+    background: #4f46e5;
+    color: #ffffff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.leave-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.leave-table tr:last-child td {
+    border-bottom: none;
+}
+
+.leave-table tr:nth-child(even) td {
+    background: #f9fafb;
+}
+
+.no-records {
+    text-align: center;
+    padding: 20px !important;
+    color: #6b7280;
+    white-space: normal !important;
+}
+
+/* Status badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-approved {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* ============================= */
+/* Form styling ({{ form.as_p }}) */
+/* ============================= */
+
+.leave-form p {
+    margin-bottom: 14px;
+}
+
+.leave-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.leave-form input,
+.leave-form select,
+.leave-form textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #ffffff;
+    color: #1f2937;
+}
+
+.leave-form input:focus,
+.leave-form select:focus,
+.leave-form textarea:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.leave-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.leave-form ul.errorlist {
+    list-style: none;
+    color: #dc2626;
+    font-size: 12.5px;
+    margin: 4px 0 0;
+    padding: 0;
+}
+
+/* ============================= */
+/* Buttons */
+/* ============================= */
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 13px 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background: #4f46e5;
+    color: #ffffff;
+}
+
+.btn-primary:active {
+    background: #4338ca;
+}
+
+/* ============================= */
+/* Tablet / Desktop */
+/* ============================= */
+
+@media (min-width: 700px) {
+
+    .leave-page {
+        padding: 30px 20px;
+    }
+
+    .leave-page h2 {
+        font-size: 26px;
+        text-align: left;
+    }
+
+    .leave-card {
+        padding: 24px;
+    }
+
+    .leave-table {
+        min-width: 100%;
+        font-size: 14px;
+    }
+
+    .leave-table th,
+    .leave-table td {
+        white-space: normal;
+    }
+
+    .leave-form {
+        max-width: 480px;
+    }
+
+    .btn {
+        width: auto;
+        display: inline-block;
+        padding: 12px 28px;
+    }
+
+    .btn-primary:hover {
+        background: #4338ca;
+        transform: translateY(-2px);
+    }
+
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+
+{% block title %}Resignation{% endblock %}
+
+{% block content %}
+
+<div class="resignation-page">
+
+    <h2>Resignation Application</h2>
+
+    <a href="{% url 'dashboard' %}" class="back-link">← Go to Dashboard</a>
+
+    <!-- ===================================== -->
+    <!-- Apply Form -->
+    <!-- ===================================== -->
+
+    <section class="resignation-card">
+
+        <h3>Apply for Resignation</h3>
+
+        <form method="POST" class="resignation-form">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-danger">
+                Apply for Resignation
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- History -->
+    <!-- ===================================== -->
+
+    <section class="resignation-card">
+
+        <h3>My Resignation Applications</h3>
+
+        <div class="table-wrapper">
+
+            <table class="resignation-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Resignation Date</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Applied Date & Time</th>
+                        <th>Last Updated</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for resignation in resignations %}
+
+                    <tr>
+
+                        <td>
+                            {{ resignation.resignation_date }}
+                        </td>
+
+                        <td>
+                            {{ resignation.reason }}
+                        </td>
+
+                        <td>
+                            <span class="status-badge status-{{ resignation.status|lower }}">
+                                {{ resignation.status }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {{ resignation.applied_at|date:"d-m-Y h:i A" }}
+                        </td>
+
+                        <td>
+                            {{ resignation.updated_at|date:"d-m-Y h:i A" }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="5" class="no-records">
+                            No resignation application found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     CSS (Mobile First)
+========================================================= -->
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #f4f5f7;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #1f2937;
+}
+
+.resignation-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.resignation-page h2 {
+    font-size: 20px;
+    color: #4338ca;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.back-link {
+    display: inline-block;
+    text-decoration: none;
+    color: #4f46e5;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+/* ============================= */
+/* Card container */
+/* ============================= */
+
+.resignation-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+}
+
+.resignation-card h3 {
+    font-size: 16px;
+    color: #4338ca;
+    margin-bottom: 12px;
+}
+
+/* ============================= */
+/* Form styling ({{ form.as_p }}) */
+/* ============================= */
+
+.resignation-form p {
+    margin-bottom: 14px;
+}
+
+.resignation-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.resignation-form input,
+.resignation-form select,
+.resignation-form textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #ffffff;
+    color: #1f2937;
+}
+
+.resignation-form input:focus,
+.resignation-form select:focus,
+.resignation-form textarea:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.resignation-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.resignation-form ul.errorlist {
+    list-style: none;
+    color: #dc2626;
+    font-size: 12.5px;
+    margin: 4px 0 0;
+    padding: 0;
+}
+
+/* ============================= */
+/* Table wrapper - horizontal scroll
+   on small screens */
+/* ============================= */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+}
+
+.resignation-table {
+    width: 100%;
+    min-width: 620px;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.resignation-table th {
+    background: #4f46e5;
+    color: #ffffff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.resignation-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.resignation-table tr:last-child td {
+    border-bottom: none;
+}
+
+.resignation-table tr:nth-child(even) td {
+    background: #f9fafb;
+}
+
+.no-records {
+    text-align: center;
+    padding: 20px !important;
+    color: #6b7280;
+    white-space: normal !important;
+}
+
+/* Status badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-approved {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* ============================= */
+/* Buttons */
+/* ============================= */
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 13px 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-danger {
+    background: #d9534f;
+    color: #ffffff;
+}
+
+.btn-danger:active {
+    background: #c9302c;
+}
+
+/* ============================= */
+/* Tablet / Desktop */
+/* ============================= */
+
+@media (min-width: 700px) {
+
+    .resignation-page {
+        padding: 30px 20px;
+    }
+
+    .resignation-page h2 {
+        font-size: 26px;
+        text-align: left;
+    }
+
+    .resignation-card {
+        padding: 24px;
+    }
+
+    .resignation-table {
+        min-width: 100%;
+        font-size: 14px;
+    }
+
+    .resignation-table th,
+    .resignation-table td {
+        white-space: normal;
+    }
+
+    .resignation-form {
+        max-width: 480px;
+    }
+
+    .btn {
+        width: auto;
+        display: inline-block;
+        padding: 12px 28px;
+    }
+
+    .btn-danger:hover {
+        background: #c9302c;
+        transform: translateY(-2px);
+    }
+
+}
+
+</style>
+
+{% endblock %}

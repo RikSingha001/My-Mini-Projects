@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+
+<div class="profile-page">
+
+    <h2>My Profile</h2>
+
+    <a href="{% url 'dashboard' %}" class="back-link">← Go to Dashboard</a>
+
+    <div class="profile-card">
+
+        <table class="profile-table">
+
+            <tr>
+                <th>Employee ID</th>
+                <td>{{ profile.employee_id }}</td>
+            </tr>
+
+            <tr>
+                <th>Name</th>
+                <td>{{ profile.employee_name }}</td>
+            </tr>
+
+            <tr>
+                <th>Username</th>
+                <td>{{ profile.user.username }}</td>
+            </tr>
+
+            <tr>
+                <th>Mobile</th>
+                <td>{{ profile.mobile }}</td>
+            </tr>
+
+            <tr>
+                <th>Date of Birth</th>
+                <td>{{ profile.date_of_birth }}</td>
+            </tr>
+
+            <tr>
+                <th>Department</th>
+                <td>{{ profile.department }}</td>
+            </tr>
+
+            <tr>
+                <th>Designation</th>
+                <td>{{ profile.designation }}</td>
+            </tr>
+
+            <tr>
+                <th>Vendor</th>
+                <td>{{ profile.vendor }}</td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td>
+                    <span class="status-badge status-{{ profile.status|lower }}">
+                        {{ profile.status }}
+                    </span>
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CSS (Mobile First)
+========================================================= -->
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #f4f5f7;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #1f2937;
+}
+
+.profile-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.profile-page h2 {
+    font-size: 20px;
+    color: #4338ca;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.back-link {
+    display: inline-block;
+    text-decoration: none;
+    color: #4f46e5;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+/* ============================= */
+/* Profile card */
+/* ============================= */
+
+.profile-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 6px 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.profile-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Mobile: label above value, stacked */
+.profile-table tr {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.profile-table tr:last-child {
+    border-bottom: none;
+}
+
+.profile-table th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 0 0 4px;
+}
+
+.profile-table td {
+    font-size: 15px;
+    color: #1f2937;
+    padding: 0;
+    word-break: break-word;
+}
+
+/* Status badge */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-inactive {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* ============================= */
+/* Tablet / Desktop */
+/* ============================= */
+
+@media (min-width: 600px) {
+
+    .profile-page {
+        padding: 30px 20px;
+    }
+
+    .profile-page h2 {
+        font-size: 26px;
+        text-align: left;
+    }
+
+    .profile-card {
+        padding: 8px 24px;
+    }
+
+    /* Switch back to side-by-side label/value layout */
+    .profile-table tr {
+        flex-direction: row;
+        align-items: center;
+        padding: 14px 0;
+    }
+
+    .profile-table th {
+        width: 200px;
+        flex-shrink: 0;
+        font-size: 14px;
+        text-transform: none;
+        letter-spacing: normal;
+        color: #374151;
+        padding: 0;
+    }
+
+    .profile-table td {
+        font-size: 15px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

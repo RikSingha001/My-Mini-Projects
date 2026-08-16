@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <h1>Login</h1>
+
+        <form method="POST" class="login-form">
+
+            {% csrf_token %}
+
+            <label for="id_username">Username</label>
+            <input type="text" id="id_username" name="username" placeholder="Enter username" required>
+
+            <label for="id_password">Password</label>
+            <input type="password" id="id_password" name="password" placeholder="Enter password" required>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CSS (Mobile First)
+========================================================= -->
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #2563eb 100%);
+    min-height: 100vh;
+    color: #1f2937;
+    margin: 0;
+    padding: 16px;
+}
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 380px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.login-card h1 {
+    font-size: 22px;
+    text-align: center;
+    color: #4338ca;
+    margin-bottom: 24px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #1f2937;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.login-form input::placeholder {
+    color: #9ca3af;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 13px 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background: #4f46e5;
+    color: #ffffff;
+}
+
+.btn-primary:active {
+    background: #4338ca;
+}
+
+/* ============================= */
+/* Tablet / Desktop */
+/* ============================= */
+
+@media (min-width: 600px) {
+
+    .login-card {
+        padding: 40px 32px;
+    }
+
+    .login-card h1 {
+        font-size: 26px;
+    }
+
+    .btn-primary:hover {
+        background: #4338ca;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(67, 56, 202, 0.35);
+    }
+
+}
+
+</style>
+
+{% endblock %}

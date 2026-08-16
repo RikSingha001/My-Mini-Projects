@@ -1,0 +1,1387 @@
+{% extends 'base.html' %}
+
+{% block title %}Attendance{% endblock %}
+
+{% block content %}
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #f4f5f7;
+    color: #1f2937;
+    padding: 12px;
+}
+
+h1 {
+    font-size: 20px;
+    text-align: center;
+    color: #4338ca;
+    margin-bottom: 8px;
+}
+
+h2 {
+    font-size: 17px;
+    color: #4338ca;
+    margin: 16px 0 12px;
+    text-align: center;
+}
+
+h3 {
+    font-size: 14px;
+    color: #374151;
+    margin: 14px 0 8px;
+}
+
+p {
+    font-size: 13px;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+p a {
+    text-decoration: none;
+    color: #4f46e5;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 20px 0;
+}
+
+/* Camera video (id="inVideo" / id="outVideo") */
+#inVideo,
+#outVideo {
+    width: 100% !important;
+    max-width: 320px;
+    height: auto !important;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+/* Take Photo / Submit buttons */
+#inCaptureBtn,
+#captureOutBtn,
+#inSubmitBtn,
+#submitOutBtn {
+    display: block;
+    width: 100%;
+    padding: 13px 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: 0.2s;
+}
+
+#inCaptureBtn,
+#captureOutBtn {
+    background: #eef2ff;
+    color: #4338ca;
+    border: 1px solid #c7d2fe;
+}
+
+#inCaptureBtn:active,
+#captureOutBtn:active {
+    background: #e0e7ff;
+}
+
+#inSubmitBtn {
+    background: #4f46e5;
+    color: #ffffff;
+}
+
+#inSubmitBtn:active {
+    background: #4338ca;
+}
+
+#submitOutBtn {
+    background: #d9534f;
+    color: #ffffff;
+}
+
+#submitOutBtn:active {
+    background: #c9302c;
+}
+
+#inSubmitBtn:disabled,
+#submitOutBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Status spans */
+#inPhotoStatus,
+#outPhotoStatus,
+#inLocationStatus,
+#outLocationStatus {
+    font-weight: 600;
+    color: #6b7280;
+}
+
+/* Latitude / Longitude / Location display */
+#inLatitude,
+#inLongitude,
+#inLocation {
+    font-weight: 500;
+    word-break: break-word;
+}
+
+/* Tablet / Desktop */
+@media (min-width: 600px) {
+
+    body {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px 20px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    #inCaptureBtn,
+    #captureOutBtn,
+    #inSubmitBtn,
+    #submitOutBtn {
+        width: auto;
+        display: inline-block;
+        padding: 12px 28px;
+    }
+
+    #inCaptureBtn:hover,
+    #captureOutBtn:hover {
+        background: #e0e7ff;
+        transform: translateY(-2px);
+    }
+
+    #inSubmitBtn:hover {
+        background: #4338ca;
+        transform: translateY(-2px);
+    }
+
+    #submitOutBtn:hover {
+        background: #c9302c;
+        transform: translateY(-2px);
+    }
+
+}
+
+</style>
+
+<h1>User Attendance</h1>
+
+<p>
+    <a href="{% url 'dashboard' %}">← Dashboard</a>
+</p>
+
+<hr>
+
+
+<h2>Attendance IN</h2>
+
+<form method="POST"
+      enctype="multipart/form-data"
+      id="attendanceForm">
+
+    {% csrf_token %}
+
+    {% if form.errors %}
+        <div style="color:red;">
+            <strong>Please fix the following errors:</strong>
+            {{ form.errors }}
+        </div>
+    {% endif %}
+
+    <!-- Camera -->
+    <div style="margin-bottom:15px;">
+
+        <video
+            id="inVideo"
+            width="320"
+            height="240"
+            autoplay
+            playsinline
+            style="border:1px solid #ccc;">
+        </video>
+
+    </div>
+
+    <!-- Capture IN -->
+    <button
+        type="button"
+        id="inCaptureBtn">
+
+        Take Photo
+
+    </button>
+
+    <p>
+        Photo Status:
+        <span id="inPhotoStatus">
+            Not captured
+        </span>
+    </p>
+
+    <canvas
+        id="inCanvas"
+        style="display:none;">
+    </canvas>
+
+
+    <div style="display:none;">
+
+        {{ form.image }}
+
+    </div>
+
+
+    <h3>Location</h3>
+
+    <p>
+        GPS Status:
+        <span id="inLocationStatus">
+            Getting location...
+        </span>
+    </p>
+
+    <div style="display:none;">
+
+        {{ form.latitude }}
+        {{ form.longitude }}
+        {{ form.location }}
+
+    </div>
+
+    <p>
+        <strong>Latitude:</strong>
+        <span id="inLatitude">---</span>
+    </p>
+
+    <p>
+        <strong>Longitude:</strong>
+        <span id="inLongitude">---</span>
+    </p>
+
+    <p>
+        <strong>Location:</strong>
+        <span id="inLocation">Getting location...</span>
+    </p>
+
+
+    <button
+        type="submit"
+        id="inSubmitBtn">
+
+        Submit Attendance IN
+
+    </button>
+
+</form>
+
+
+<hr>
+
+
+
+<h2>Attendance OUT</h2>
+
+<div>
+
+    <video
+        id="outVideo"
+        width="320"
+        height="240"
+        autoplay
+        playsinline
+        style="border:1px solid #ccc;"
+    ></video>
+
+</div>
+
+<br>
+
+<button
+    type="button"
+    id="captureOutBtn"
+>
+    Take OUT Photo
+</button>
+
+<p>
+    OUT Photo Status:
+    <span id="outPhotoStatus">
+        Not captured
+    </span>
+</p>
+
+<canvas
+    id="outCanvas"
+    style="display:none;"
+></canvas>
+
+
+<form
+    method="POST"
+    action="{% url 'attendance_out' %}"
+    enctype="multipart/form-data"
+    id="attendanceOutForm"
+>
+
+    {% csrf_token %}
+
+    <input
+        type="file"
+        name="out_image"
+        id="id_out_image"
+        hidden
+    >
+
+    <input
+        type="hidden"
+        name="out_latitude"
+        id="id_out_latitude"
+    >
+
+    <input
+        type="hidden"
+        name="out_longitude"
+        id="id_out_longitude"
+    >
+
+    <input
+        type="hidden"
+        name="out_location"
+        id="id_out_location"
+    >
+
+    <p>
+        OUT GPS:
+        <span id="outLocationStatus">
+            Detecting...
+        </span>
+    </p>
+
+    <button
+        type="submit"
+        id="submitOutBtn"
+    >
+        Attendance OUT
+    </button>
+
+</form>
+
+
+<hr>
+
+
+
+<script>
+
+
+const inVideo =
+    document.getElementById("inVideo");
+
+const outVideo =
+    document.getElementById("outVideo");
+
+const inCanvas =
+    document.getElementById("inCanvas");
+
+const outCanvas =
+    document.getElementById("outCanvas");
+
+const inCaptureBtn =
+    document.getElementById("inCaptureBtn");
+
+const captureOutBtn =
+    document.getElementById("captureOutBtn");
+
+const inPhotoStatus =
+    document.getElementById("inPhotoStatus");
+
+const outPhotoStatus =
+    document.getElementById("outPhotoStatus");
+
+const outLocationStatus =
+    document.getElementById("outLocationStatus");
+
+const attendanceForm =
+    document.getElementById("attendanceForm");
+
+const attendanceOutForm =
+    document.getElementById("attendanceOutForm");
+
+const inSubmitBtn =
+    document.getElementById("inSubmitBtn");
+
+const submitOutBtn =
+    document.getElementById("submitOutBtn");
+
+const inImageInput =
+    document.getElementById("id_image");
+
+const outImageInput =
+    document.getElementById("id_out_image");
+
+const inLatitudeInput =
+    document.getElementById("id_latitude");
+
+const inLongitudeInput =
+    document.getElementById("id_longitude");
+
+const inLocationInput =
+    document.getElementById("id_location");
+
+const outLatitudeInput =
+    document.getElementById("id_out_latitude");
+
+const outLongitudeInput =
+    document.getElementById("id_out_longitude");
+
+const outLocationInput =
+    document.getElementById("id_out_location");
+
+
+
+console.log("IN VIDEO:", inVideo);
+console.log("OUT VIDEO:", outVideo);
+console.log("IN IMAGE:", inImageInput);
+console.log("OUT IMAGE:", outImageInput);
+console.log("IN FORM:", attendanceForm);
+console.log("OUT FORM:", attendanceOutForm);
+
+
+
+let cameraStream = null;
+
+
+function startCamera() {
+
+    if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+    ) {
+
+        alert(
+            "Camera is not supported by this browser."
+        );
+
+        return;
+
+    }
+
+
+    navigator.mediaDevices.getUserMedia({
+
+        video: {
+            facingMode: "user"
+        },
+
+        audio: false
+
+    })
+
+    .then(function(stream) {
+
+        cameraStream = stream;
+
+
+        if (inVideo) {
+
+            inVideo.srcObject =
+                stream;
+
+        }
+
+
+        if (outVideo) {
+
+            outVideo.srcObject =
+                stream;
+
+        }
+
+
+        console.log(
+            "Camera started successfully"
+        );
+
+    })
+
+    .catch(function(error) {
+
+        console.error(
+            "Camera error:",
+            error
+        );
+
+
+        if (inPhotoStatus) {
+
+            inPhotoStatus.innerText =
+                "Camera unavailable";
+
+            inPhotoStatus.style.color =
+                "red";
+
+        }
+
+
+        if (outPhotoStatus) {
+
+            outPhotoStatus.innerText =
+                "Camera unavailable";
+
+            outPhotoStatus.style.color =
+                "red";
+
+        }
+
+    });
+
+}
+
+
+
+startCamera();
+
+
+if (inCaptureBtn) {
+
+    inCaptureBtn.addEventListener(
+        "click",
+        function() {
+
+
+            if (
+                !inVideo ||
+                inVideo.videoWidth === 0 ||
+                inVideo.videoHeight === 0
+            ) {
+
+                alert(
+                    "IN camera is not ready yet."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Canvas size
+             */
+
+            inCanvas.width =
+                inVideo.videoWidth;
+
+            inCanvas.height =
+                inVideo.videoHeight;
+
+
+            /*
+             * Draw camera frame
+             */
+
+            const context =
+                inCanvas.getContext("2d");
+
+
+            context.drawImage(
+                inVideo,
+                0,
+                0,
+                inCanvas.width,
+                inCanvas.height
+            );
+
+
+            /*
+             * Convert to image
+             */
+
+            inCanvas.toBlob(
+
+                function(blob) {
+
+
+                    if (!blob) {
+
+                        alert(
+                            "Could not capture IN photo."
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Create File
+                     */
+
+                    const file =
+                        new File(
+
+                            [blob],
+
+                            "attendance_in.jpg",
+
+                            {
+                                type:
+                                    "image/jpeg"
+                            }
+
+                        );
+
+
+                    /*
+                     * Put File into
+                     * Django image field
+                     */
+
+                    const dataTransfer =
+                        new DataTransfer();
+
+
+                    dataTransfer.items.add(
+                        file
+                    );
+
+
+                    if (!inImageInput) {
+
+                        alert(
+                            "IN image input not found."
+                        );
+
+                        return;
+
+                    }
+
+
+                    inImageInput.files =
+                        dataTransfer.files;
+
+
+                    console.log(
+                        "IN FILE:",
+                        inImageInput.files[0]
+                    );
+
+
+                    inPhotoStatus.innerText =
+                        "Photo captured successfully";
+
+                    inPhotoStatus.style.color =
+                        "green";
+
+
+                },
+
+                "image/jpeg",
+
+                0.90
+
+            );
+
+        }
+    );
+
+}
+
+
+if (captureOutBtn) {
+
+    captureOutBtn.addEventListener(
+        "click",
+        function() {
+
+
+            if (
+                !outVideo ||
+                outVideo.videoWidth === 0 ||
+                outVideo.videoHeight === 0
+            ) {
+
+                alert(
+                    "OUT camera is not ready yet."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Canvas size
+             */
+
+            outCanvas.width =
+                outVideo.videoWidth;
+
+            outCanvas.height =
+                outVideo.videoHeight;
+
+
+            /*
+             * Draw OUT camera frame
+             */
+
+            const context =
+                outCanvas.getContext("2d");
+
+
+            context.drawImage(
+                outVideo,
+                0,
+                0,
+                outCanvas.width,
+                outCanvas.height
+            );
+
+
+            /*
+             * Convert OUT image
+             */
+
+            outCanvas.toBlob(
+
+                function(blob) {
+
+
+                    if (!blob) {
+
+                        alert(
+                            "Could not capture OUT photo."
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Create OUT File
+                     */
+
+                    const file =
+                        new File(
+
+                            [blob],
+
+                            "attendance_out.jpg",
+
+                            {
+                                type:
+                                    "image/jpeg"
+                            }
+
+                        );
+
+
+                    /*
+                     * Put file into
+                     * hidden input
+                     */
+
+                    const dataTransfer =
+                        new DataTransfer();
+
+
+                    dataTransfer.items.add(
+                        file
+                    );
+
+
+                    if (!outImageInput) {
+
+                        alert(
+                            "OUT image input not found."
+                        );
+
+                        return;
+
+                    }
+
+
+                    outImageInput.files =
+                        dataTransfer.files;
+
+
+                    console.log(
+                        "OUT FILE:",
+                        outImageInput.files[0]
+                    );
+
+
+                    outPhotoStatus.innerText =
+                        "OUT photo captured successfully";
+
+                    outPhotoStatus.style.color =
+                        "green";
+
+
+                },
+
+                "image/jpeg",
+
+                0.90
+
+            );
+
+        }
+    );
+
+}
+
+
+
+function getGPSLocation() {
+
+    if (!navigator.geolocation) {
+
+        if (outLocationStatus) {
+
+            outLocationStatus.innerText =
+                "GPS not supported";
+
+            outLocationStatus.style.color =
+                "red";
+
+        }
+
+        return;
+
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+
+            /*
+             * IMPORTANT:
+             *
+             * Round GPS to 7 decimal places
+             *
+             * Because Django model has:
+             *
+             * max_digits=10
+             * decimal_places=7
+             */
+
+            const latitude =
+                Number(
+                    position.coords.latitude.toFixed(7)
+                );
+
+
+            const longitude =
+                Number(
+                    position.coords.longitude.toFixed(7)
+                );
+
+
+            console.log(
+                "GPS latitude:",
+                latitude
+            );
+
+            console.log(
+                "GPS longitude:",
+                longitude
+            );
+
+
+  
+
+            if (inLatitudeInput) {
+
+                inLatitudeInput.value =
+                    latitude;
+
+            }
+
+
+            if (inLongitudeInput) {
+
+                inLongitudeInput.value =
+                    longitude;
+
+            }
+
+
+
+            if (outLatitudeInput) {
+
+                outLatitudeInput.value =
+                    latitude;
+
+            }
+
+
+            if (outLongitudeInput) {
+
+                outLongitudeInput.value =
+                    longitude;
+
+            }
+
+
+
+            const inLatitudeDisplay =
+                document.getElementById(
+                    "inLatitude"
+                );
+
+            const inLongitudeDisplay =
+                document.getElementById(
+                    "inLongitude"
+                );
+
+            const inLocationDisplay =
+                document.getElementById(
+                    "inLocation"
+                );
+
+            const outLatitudeDisplay =
+                document.getElementById(
+                    "outLatitude"
+                );
+
+            const outLongitudeDisplay =
+                document.getElementById(
+                    "outLongitude"
+                );
+
+            const outLocationDisplay =
+                document.getElementById(
+                    "outLocation"
+                );
+
+
+            if (inLatitudeDisplay) {
+
+                inLatitudeDisplay.innerText =
+                    latitude;
+
+            }
+
+
+            if (inLongitudeDisplay) {
+
+                inLongitudeDisplay.innerText =
+                    longitude;
+
+            }
+
+
+            if (outLatitudeDisplay) {
+
+                outLatitudeDisplay.innerText =
+                    latitude;
+
+            }
+
+
+            if (outLongitudeDisplay) {
+
+                outLongitudeDisplay.innerText =
+                    longitude;
+
+            }
+
+
+            if (outLocationStatus) {
+
+                outLocationStatus.innerText =
+                    "GPS location detected";
+
+                outLocationStatus.style.color =
+                    "green";
+
+            }
+
+
+
+            fetch(
+
+                "https://nominatim.openstreetmap.org/reverse" +
+                "?format=json" +
+                "&lat=" +
+                latitude +
+                "&lon=" +
+                longitude,
+
+                {
+
+                    headers: {
+
+                        "Accept":
+                            "application/json"
+
+                    }
+
+                }
+
+            )
+
+            .then(function(response) {
+
+                return response.json();
+
+            })
+
+            .then(function(data) {
+
+
+                const address =
+                    data.display_name ||
+                    "Location unavailable";
+
+
+                console.log(
+                    "Address:",
+                    address
+                );
+
+
+
+                if (inLocationInput) {
+
+                    inLocationInput.value =
+                        address;
+
+                }
+
+
+                if (inLocationDisplay) {
+
+                    inLocationDisplay.innerText =
+                        address;
+
+                }
+
+
+                if (outLocationInput) {
+
+                    outLocationInput.value =
+                        address;
+
+                }
+
+
+                if (outLocationDisplay) {
+
+                    outLocationDisplay.innerText =
+                        address;
+
+                }
+
+
+                if (outLocationStatus) {
+
+                    outLocationStatus.innerText =
+                        "GPS + address detected";
+
+                    outLocationStatus.style.color =
+                        "green";
+
+                }
+
+            })
+
+            .catch(function(error) {
+
+                console.error(
+                    "Reverse geocoding error:",
+                    error
+                );
+
+
+                /*
+                 * GPS coordinates are still saved.
+                 */
+
+                if (outLocationStatus) {
+
+                    outLocationStatus.innerText =
+                        "GPS detected";
+
+                    outLocationStatus.style.color =
+                        "green";
+
+                }
+
+            });
+
+        },
+
+
+        function(error) {
+
+            console.error(
+                "GPS error:",
+                error
+            );
+
+
+            if (outLocationStatus) {
+
+                outLocationStatus.innerText =
+                    "Unable to retrieve GPS";
+
+                outLocationStatus.style.color =
+                    "red";
+
+            }
+
+        },
+
+
+        {
+
+            enableHighAccuracy: true,
+
+            timeout: 15000,
+
+            maximumAge: 0
+
+        }
+
+    );
+
+}
+
+
+/*
+ * START GPS
+ */
+
+getGPSLocation();
+
+
+
+if (attendanceForm) {
+
+    attendanceForm.addEventListener(
+        "submit",
+        function(event) {
+
+
+            console.log(
+                "========== IN SUBMIT =========="
+            );
+
+
+            console.log(
+                "IN image:",
+                inImageInput?.files
+            );
+
+
+            console.log(
+                "IN latitude:",
+                inLatitudeInput?.value
+            );
+
+
+            console.log(
+                "IN longitude:",
+                inLongitudeInput?.value
+            );
+
+
+            /*
+             * CHECK PHOTO
+             */
+
+            if (
+                !inImageInput ||
+                !inImageInput.files ||
+                inImageInput.files.length === 0
+            ) {
+
+                event.preventDefault();
+
+                alert(
+                    "Please take Attendance IN photo first."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * CHECK GPS
+             */
+
+            if (
+                !inLatitudeInput ||
+                !inLatitudeInput.value ||
+                !inLongitudeInput ||
+                !inLongitudeInput.value
+            ) {
+
+                event.preventDefault();
+
+                alert(
+                    "IN GPS is not ready. Please wait."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * SUBMIT
+             */
+
+            if (inSubmitBtn) {
+
+                inSubmitBtn.disabled =
+                    true;
+
+                inSubmitBtn.innerText =
+                    "Submitting IN...";
+
+            }
+
+        }
+    );
+
+}
+
+
+
+if (attendanceOutForm) {
+
+    attendanceOutForm.addEventListener(
+        "submit",
+        function(event) {
+
+
+            console.log(
+                "========== OUT SUBMIT =========="
+            );
+
+
+            console.log(
+                "OUT image:",
+                outImageInput?.files
+            );
+
+
+            console.log(
+                "OUT latitude:",
+                outLatitudeInput?.value
+            );
+
+
+            console.log(
+                "OUT longitude:",
+                outLongitudeInput?.value
+            );
+
+
+            console.log(
+                "OUT location:",
+                outLocationInput?.value
+            );
+
+
+            if (
+                !outImageInput ||
+                !outImageInput.files ||
+                outImageInput.files.length === 0
+            ) {
+
+                event.preventDefault();
+
+                alert(
+                    "Please take OUT photo first."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !outLatitudeInput ||
+                !outLatitudeInput.value
+            ) {
+
+                event.preventDefault();
+
+                alert(
+                    "OUT GPS latitude is missing."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !outLongitudeInput ||
+                !outLongitudeInput.value
+            ) {
+
+                event.preventDefault();
+
+                alert(
+                    "OUT GPS longitude is missing."
+                );
+
+                return;
+
+            }
+
+
+
+            if (submitOutBtn) {
+
+                submitOutBtn.disabled =
+                    true;
+
+                submitOutBtn.innerText =
+                    "Saving OUT...";
+
+            }
+
+
+            console.log(
+                "OUT data is ready to send to Django."
+            );
+
+        }
+    );
+
+}
+
+</script>
+
+
+{% endblock %}
