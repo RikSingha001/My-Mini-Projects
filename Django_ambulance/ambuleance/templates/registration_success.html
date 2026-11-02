@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block title %}Registration Success{% endblock %}
+
+{% block content %}
+
+<style>
+body{
+    background:#0f0f0f;
+    font-family:Arial;
+}
+
+.container{
+    width:90%;
+    max-width:500px;
+    margin:auto;
+    padding:60px 0;
+}
+
+.card{
+    background:#171717;
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    color:white;
+}
+
+.success{
+    font-size:60px;
+    margin-bottom:15px;
+}
+
+.code{
+    margin-top:20px;
+    background:#262626;
+    padding:20px;
+    border-radius:15px;
+    font-size:30px;
+    font-weight:bold;
+    color:#e63946;
+    letter-spacing:3px;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:14px 20px;
+    background:#e63946;
+    color:white;
+    text-decoration:none;
+    border-radius:12px;
+}
+</style>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="success">
+            ✅
+        </div>
+
+        <h2>
+            Hospital Registered Successfully
+        </h2>
+
+        <p>
+            Your ambulance registration key code
+        </p>
+
+        <div class="code" id="codeText">
+            {{ hospital.ambulance_key_code }}
+        </div>
+
+        <div class="btn-group">
+
+            <a href="{% url 'ambulance_registration' %}" class="btn">
+                Register Ambulance
+            </a>
+
+            <button class="btn download-btn" onclick="downloadCode()">
+                Download Code
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+body{
+    background:#000;
+    font-family:Arial,sans-serif;
+}
+
+.container{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    width:420px;
+    background:#111;
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    color:white;
+}
+
+.success{
+    font-size:70px;
+    margin-bottom:20px;
+}
+
+h2{
+    margin-bottom:10px;
+}
+
+p{
+    color:#bbb;
+    margin-bottom:25px;
+}
+
+.code{
+    background:#1f1f1f;
+    padding:20px;
+    border-radius:12px;
+    font-size:36px;
+    font-weight:bold;
+    letter-spacing:4px;
+    color:#ff3b4a;
+    margin-bottom:25px;
+}
+
+.btn-group{
+    display:flex;
+    gap:15px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.btn{
+    display:inline-block;
+    padding:14px 22px;
+    border-radius:12px;
+    background:#ff3b4a;
+    color:white;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.btn:hover{
+    opacity:0.9;
+}
+
+.download-btn{
+    background:#16a34a;
+}
+</style>
+
+<script>
+function downloadCode() {
+
+    let code = document.getElementById("codeText").innerText.trim();
+
+    let content = `Hospital Ambulance Registration Code:
+
+${code}`;
+
+    let blob = new Blob([content], {
+        type: "text/plain"
+    });
+
+    let link = document.createElement("a");
+
+    link.href = window.URL.createObjectURL(blob);
+
+    link.download = "ambulance_code.txt";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+}
+</script>
+
+{% endblock %}

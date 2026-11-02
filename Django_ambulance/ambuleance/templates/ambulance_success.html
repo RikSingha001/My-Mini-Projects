@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Ambulance Registered{% endblock %}
+
+{% block content %}
+
+<style>
+body{
+    background:#0f0f0f;
+    font-family:Arial;
+}
+
+.container{
+    width:90%;
+    max-width:500px;
+    margin:auto;
+    padding:60px 0;
+}
+
+.card{
+    background:#171717;
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    color:white;
+}
+
+.icon{
+    font-size:70px;
+    margin-bottom:20px;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:14px 22px;
+    background:#e63946;
+    color:white;
+    text-decoration:none;
+    border-radius:12px;
+}
+</style>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="icon">
+            🚑
+        </div>
+
+        <h2>
+            Ambulance Registered Successfully
+        </h2>
+
+
+        <p>
+            Your ambulance is now connected with hospital emergency system.
+        </p>
+        <a href="{% url 'ambulance_login_view' %}" class="btn">
+    Already registered? Login here
+</a>
+
+        
+
+    </div>
+
+</div>
+
+{% endblock %}

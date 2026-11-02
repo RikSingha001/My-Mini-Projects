@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+body{
+    background:#0f0f0f;
+    font-family:Arial;
+    color:white;
+}
+
+.container{
+    width:90%;
+    max-width:900px;
+    margin:auto;
+    padding:40px 0;
+}
+
+.card{
+    background:#171717;
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:20px;
+}
+
+.title{
+    font-size:40px;
+    margin-bottom:30px;
+}
+
+.driver{
+    font-size:22px;
+    margin-bottom:10px;
+}
+
+.phone{
+    color:#bbb;
+    margin-bottom:10px;
+}
+
+.status{
+    color:#00ff88;
+    font-weight:bold;
+}
+
+</style>
+
+<div class="container">
+
+    <h1 class="title">
+        {{ emergency.emergency_type }} Ambulances
+    </h1>
+
+    {% for ambulance in matched_ambulances %}
+
+    <div class="card">
+
+        <div class="driver">
+            🚑 {{ ambulance.name }}
+        </div>
+
+        <div class="phone">
+            📞 {{ ambulance.phone }}
+        </div>
+
+        <div>
+            Ambulance Number:
+            {{ ambulance.ambulance_number }}
+        </div>
+
+        <div>
+            Service:
+            {{ ambulance.ambulance_service_type }}
+        </div>
+
+        <div class="status">
+            ON DUTY
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="card">
+        No ambulance available now.
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
